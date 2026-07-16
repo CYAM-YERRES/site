@@ -29,7 +29,7 @@
     backdrop-filter:saturate(1.1) blur(6px);border-bottom:1px solid var(--line)}
   .nav-in{max-width:1080px;margin:0 auto;padding:12px 22px;display:flex;align-items:center;gap:18px}
   .logo{display:flex;align-items:center;gap:11px;text-decoration:none;font-family:var(--serif);font-weight:600;font-size:20px;letter-spacing:.04em}
-  .logo .seal{width:34px;height:34px;flex:none}
+  .logo .seal{width:42px;height:42px;flex:none;border-radius:50%}
   .logo small{display:block;font-family:var(--sans);font-size:9.5px;letter-spacing:.18em;color:var(--ink-soft);text-transform:uppercase;font-weight:600}
   nav.links{margin-left:auto;display:flex;align-items:center;gap:22px}
   nav.links a{text-decoration:none;font-size:14.5px;color:var(--ink);font-weight:500;padding:4px 0;border-bottom:2px solid transparent}
@@ -120,10 +120,7 @@
 <header class="nav">
   <div class="nav-in">
     <a class="logo" href="index.html">
-      <svg class="seal" viewBox="0 0 100 100" aria-hidden="true">
-        <circle cx="50" cy="50" r="46" fill="none" stroke="var(--seal)" stroke-width="5"/>
-        <text x="50" y="62" text-anchor="middle" font-family="var(--serif)" font-size="34" fill="var(--seal)" font-weight="700">C</text>
-      </svg>
+      <img class="seal" src="logo-cyam.png" alt="Logo du CYAM Yerres" width="42" height="42">
       <span>CYAM<small>Yerres · Arts martiaux</small></span>
     </a>
     <button class="menu-toggle" id="mt" aria-label="Menu">☰</button>
