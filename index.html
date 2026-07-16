@@ -90,8 +90,9 @@
   .disc-intro p{margin:0 0 12px}
   .disc-intro strong{color:var(--ink);font-weight:600}
   .disc-card{--card:#FFFAF0;--ink:#1C1A15;--ink-soft:#57524A;--line:#EBE4D6;--line-strong:#D4CBB8;--seal-soft:#F6E7E4;
-    background:#FFFAF0;color:var(--ink);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;gap:14px;align-items:flex-start;transition:border-color .12s,transform .12s;text-decoration:none;cursor:pointer}
-  .disc-card:hover{border-color:var(--seal);transform:translateY(-2px)}
+    background:#FFFAF0;color:var(--ink);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;gap:14px;align-items:flex-start;transition:border-color .15s,transform .15s,background-color .2s,color .2s;text-decoration:none;cursor:pointer}
+  .disc-card:hover{border-color:var(--seal);background:#302B25;color:#FFFAF0;transform:translateY(-2px)}
+  .disc-card:hover h3,.disc-card:hover p{color:#FFFAF0}
   .medallion{width:42px;height:42px;flex:none;border-radius:50%;border:1.5px solid var(--seal);color:var(--seal);
     display:grid;place-items:center;font-family:var(--serif);font-size:19px;font-weight:700;background:var(--seal-soft)}
   .disc-card h3{margin:0 0 3px;font-size:16px;font-family:var(--serif);font-weight:600}
@@ -109,7 +110,7 @@
   /* ---- Actualités ---- */
   .news-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
   @media(max-width:760px){.news-grid{grid-template-columns:1fr}}
-  .news{background:#FFFAF0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:border-color .12s,transform .12s}
+  .news{background:#F6EDDB;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:border-color .12s,transform .12s}
   .news:hover{border-color:var(--seal);transform:translateY(-2px)}
   .news .body{padding:18px 18px 20px}
   .news .cat{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--seal);background:var(--seal-soft);border:1px solid var(--line-strong);border-radius:20px;padding:4px 11px;margin-bottom:12px}
