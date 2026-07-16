@@ -41,6 +41,8 @@
   .btn.ink:hover{background:#000}
   .btn.ghost{background:none;border-color:var(--line-strong);color:var(--ink)}
   .btn.ghost:hover{border-color:var(--ink)}
+  .btn.soon{background:var(--line);color:var(--ink-soft);border-color:var(--line-strong);
+    cursor:not-allowed;pointer-events:none;opacity:.85}
   .menu-toggle{display:none;margin-left:auto;background:none;border:1px solid var(--line-strong);border-radius:8px;padding:8px 10px;cursor:pointer}
   @media(max-width:820px){
     nav.links{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;
@@ -129,7 +131,7 @@
       <a href="#disciplines">Disciplines</a>
       <a href="#actualites">Actualités</a>
       <a href="#contact">Contact</a>
-      <a class="btn primary" href="adhesion.html">Adhérer</a>
+      <span class="btn soon" aria-disabled="true">Adhérer · bientôt</span>
     </nav>
   </div>
 </header>
@@ -140,7 +142,7 @@
   <h1>La réalisation de soi par la pratique.</h1>
   <p class="lede">Depuis 1965, le CYAM transmet les arts martiaux japonais à Yerres — l'harmonie du corps et de l'esprit, la maîtrise de soi et l'aventure humaine au sein d'une équipe.</p>
   <div class="cta">
-    <a class="btn ink" href="adhesion.html">Adhérer en ligne</a>
+    <span class="btn soon" aria-disabled="true">Adhésion en ligne — bientôt disponible</span>
     <a class="btn ghost" href="#disciplines">Découvrir les disciplines</a>
   </div>
   <svg class="brush" viewBox="0 0 220 14" aria-hidden="true"><path d="M2 8 C40 2, 80 12, 120 6 S200 3, 218 7" fill="none" stroke="var(--seal)" stroke-width="3" stroke-linecap="round" opacity=".8"/></svg>
@@ -174,10 +176,10 @@
 <section class="section-pad wrap">
   <div class="cta-band">
     <div>
-      <h2>Inscriptions saison 2026/2027 ouvertes</h2>
-      <p>Choisissez vos disciplines et réglez votre adhésion en ligne. La réduction s'applique automatiquement dès la 2ᵉ inscription.</p>
+      <h2>Inscriptions en ligne bientôt disponibles</h2>
+      <p>L'adhésion en ligne pour la saison 2026/2027 ouvrira très prochainement. En attendant, contactez le club pour toute information.</p>
     </div>
-    <a class="btn primary" href="adhesion.html" style="font-size:16px;padding:14px 24px">Adhérer maintenant</a>
+    <span class="btn soon" aria-disabled="true" style="font-size:16px;padding:14px 24px">Bientôt disponible</span>
   </div>
 </section>
 
@@ -205,7 +207,7 @@
       <a href="#club">Le club</a>
       <a href="#disciplines">Disciplines</a>
       <a href="#actualites">Actualités</a>
-      <a href="adhesion.html">Adhésion en ligne</a>
+      <span style="font-size:14px;color:var(--ink-soft);margin:5px 0;display:block;opacity:.7">Adhésion en ligne (bientôt)</span>
     </div>
   </div>
   <div class="wrap legal">
