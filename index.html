@@ -82,7 +82,10 @@
   .disc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px}
   @media(max-width:760px){.disc-grid{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:460px){.disc-grid{grid-template-columns:1fr}}
-  .disc-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;gap:14px;align-items:flex-start;transition:border-color .12s,transform .12s}
+  .disc-intro{max-width:72ch;margin:4px 0 26px;color:var(--ink-soft);font-size:15.5px}
+  .disc-intro p{margin:0 0 12px}
+  .disc-intro strong{color:var(--ink);font-weight:600}
+  .disc-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;gap:14px;align-items:flex-start;transition:border-color .12s,transform .12s;text-decoration:none;color:inherit;cursor:pointer}
   .disc-card:hover{border-color:var(--line-strong);transform:translateY(-2px)}
   .medallion{width:42px;height:42px;flex:none;border-radius:50%;border:1.5px solid var(--seal);color:var(--seal);
     display:grid;place-items:center;font-family:var(--serif);font-size:19px;font-weight:700;background:var(--seal-soft)}
@@ -179,6 +182,10 @@
 <section class="section-pad wrap" id="disciplines">
   <span class="eyebrow">Nos disciplines</span>
   <h2 class="section">Huit voies, un même dojo.</h2>
+  <div class="disc-intro">
+    <p>1965 : année de création de l'association « Judo Club Yerrois », à la suite du désir de plusieurs judokas habitant la commune de Yerres. En 1969, le club s'agrandit avec la création de la section Aïkido. En 1972, la création de la section Karaté vient diversifier un peu plus encore les disciplines proposées.</p>
+    <p>C'est en 1976 que le nom de <strong>Club Yerrois d'Arts Martiaux (C.Y.A.M.)</strong> est définitivement adopté. Dès lors, d'autres sections d'arts martiaux ont été créées : Ju-Jitsu (1981), Kyudo (1985 — dissoute en 1997), Kobudo (2001), Taïso (2003) et Iaïdo (2015).</p>
+  </div>
   <div class="disc-grid" id="discGrid"></div>
 </section>
 
@@ -252,15 +259,15 @@
    Ajouter un événement = ajouter un objet dans NEWS.
    ========================================================= */
 const DISCIPLINES = [
-  { k:"J",  nom:"Judo",            desc:"Équilibre du corps et de l'esprit, projections et travail au sol." },
-  { k:"H",  nom:"Handi-Judo",      desc:"Judo adapté, en loisir ou compétition, sans matériel spécifique.", neuf:true },
-  { k:"A",  nom:"Aïkido",          desc:"L'art de l'harmonie : neutraliser sans détruire." },
-  { k:"K",  nom:"Karaté Shotokan", desc:"Puissance, précision et maîtrise des techniques pieds-poings." },
-  { k:"N",  nom:"Nihon Taï-Jitsu", desc:"Self-défense japonaise, efficace et complète." },
-  { k:"Ko", nom:"Kobudo",          desc:"Maniement des armes traditionnelles d'Okinawa." },
-  { k:"I",  nom:"Iaïdo",           desc:"L'art du sabre, concentration et geste juste." },
-  { k:"T",  nom:"Taïso & Yoga",    desc:"Préparation physique douce, souffle et souplesse." },
-  { k:"B",  nom:"Body Karaté",     desc:"Le karaté en musique, cardio et tonus pour tous." },
+  { k:"J",  nom:"Judo",            desc:"Équilibre du corps et de l'esprit, projections et travail au sol.", href:"judo.html" },
+  { k:"H",  nom:"Handi-Judo",      desc:"Judo adapté, en loisir ou compétition, sans matériel spécifique.", neuf:true, href:"handi-judo.html" },
+  { k:"A",  nom:"Aïkido",          desc:"L'art de l'harmonie : neutraliser sans détruire.", href:"aikido.html" },
+  { k:"K",  nom:"Karaté Shotokan", desc:"Puissance, précision et maîtrise des techniques pieds-poings.", href:"karate.html" },
+  { k:"N",  nom:"Nihon Taï-Jitsu", desc:"Self-défense japonaise, efficace et complète.", href:"nihon-tai-jitsu.html" },
+  { k:"Ko", nom:"Kobudo",          desc:"Maniement des armes traditionnelles d'Okinawa.", href:"kobudo.html" },
+  { k:"I",  nom:"Iaïdo",           desc:"L'art du sabre, concentration et geste juste.", href:"iaido.html" },
+  { k:"T",  nom:"Taïso & Yoga",    desc:"Préparation physique douce, souffle et souplesse.", href:"taiso.html" },
+  { k:"B",  nom:"Body Karaté",     desc:"Le karaté en musique, cardio et tonus pour tous.", href:"body-karate.html" },
 ];
 
 const NEWS = [
@@ -275,10 +282,10 @@ const NEWS = [
 const iconDojo = '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#B23A2E" stroke-width="1.5"><path d="M3 10 L12 4 L21 10"/><path d="M5 10 V20 H19 V10"/><path d="M9 20 V14 H15 V20"/></svg>';
 
 document.getElementById("discGrid").innerHTML = DISCIPLINES.map(d=>`
-  <div class="disc-card">
+  <a class="disc-card" href="${d.href}">
     <div class="medallion">${d.k}</div>
     <div><h3>${d.nom}${d.neuf?'<span class="new">Nouveau</span>':""}</h3><p>${d.desc}</p></div>
-  </div>`).join("");
+  </a>`).join("");
 
 document.getElementById("newsGrid").innerHTML = NEWS.map(n=>`
   <article class="news">
