@@ -1,0 +1,11 @@
+# Configuration locale de l'outil Claude Code
+.claude/
+
+# Fichiers système
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Fichiers temporaires
+*~
+*.tmp
