@@ -6,8 +6,8 @@
 <title>Judo &mdash; CYAM Yerres</title>
 <meta name="description" content="Le Judo au CYAM Yerres : un sport d'équilibre physique et psychique, pour enfants et adultes.">
 <style>
-  :root{--paper:#F5F1E8;--card:#FBF8F1;--ink:#1C1A15;--ink-soft:#57524A;--line:#DED6C6;--line-strong:#C9BFAB;
-    --seal:#B23A2E;--seal-soft:#F3E6E2;--seal-ink:#7A2018;--r:12px;
+  :root{--paper:#141210;--card:#1E1B18;--ink:#F4EEE4;--ink-soft:#A79E92;--line:#332D27;--line-strong:#4A4239;
+    --seal:#E4231F;--seal-soft:#2C1512;--seal-ink:#B01319;--r:12px;
     --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
     --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;}
@@ -19,19 +19,20 @@
   .eyebrow{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--seal);font-weight:600}
   .eyebrow::before{content:"";display:inline-block;width:8px;height:8px;background:var(--seal);margin-right:9px;vertical-align:2px}
   h2.section{font-family:var(--serif);font-weight:600;font-size:clamp(24px,3.4vw,34px);margin:.35em 0 .5em;letter-spacing:.01em}
+  .theme-light{--paper:#F5F1E8;--card:#FBF8F1;--ink:#1C1A15;--ink-soft:#57524A;--line:#E4DDCE;--line-strong:#D4CBB8;--seal-soft:#F6E7E4;color:var(--ink)}
   header.nav{position:sticky;top:0;z-index:30;background:rgba(20,18,14,.95);backdrop-filter:saturate(1.1) blur(6px);border-bottom:1px solid rgba(255,255,255,.10)}
   .nav-in{max-width:1080px;margin:0 auto;padding:12px 22px;display:flex;align-items:center;gap:18px}
-  .logo{display:flex;align-items:center;gap:11px;text-decoration:none;font-family:var(--serif);font-weight:600;font-size:20px;letter-spacing:.04em;color:var(--paper)}
+  .logo{display:flex;align-items:center;gap:11px;text-decoration:none;font-family:var(--serif);font-weight:600;font-size:20px;letter-spacing:.04em;color:var(--ink)}
   .logo .seal{width:42px;height:42px;flex:none;border-radius:50%}
   .logo small{display:block;font-family:var(--sans);font-size:9.5px;letter-spacing:.18em;color:rgba(245,241,232,.6);text-transform:uppercase;font-weight:600}
   nav.links{margin-left:auto;display:flex;align-items:center;gap:22px}
-  nav.links a{text-decoration:none;font-size:14.5px;color:var(--paper);font-weight:500;padding:4px 0;border-bottom:2px solid transparent}
+  nav.links a{text-decoration:none;font-size:14.5px;color:var(--ink);font-weight:500;padding:4px 0;border-bottom:2px solid transparent}
   nav.links a:hover{border-color:var(--seal)}
   .btn{display:inline-block;text-decoration:none;font-weight:600;border-radius:9px;padding:10px 18px;font-size:14.5px;cursor:pointer;border:1px solid transparent}
   .btn.primary{background:var(--seal);color:#fff}
   .btn.primary:hover{background:var(--seal-ink)}
   .btn.soon{background:var(--line);color:var(--ink-soft);border-color:var(--line-strong);cursor:not-allowed;pointer-events:none;opacity:.85}
-  .menu-toggle{display:none;margin-left:auto;background:none;border:1px solid rgba(255,255,255,.3);color:var(--paper);border-radius:8px;padding:8px 10px;cursor:pointer}
+  .menu-toggle{display:none;margin-left:auto;background:none;border:1px solid rgba(255,255,255,.3);color:var(--ink);border-radius:8px;padding:8px 10px;cursor:pointer}
   @media(max-width:820px){nav.links{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:rgba(20,18,14,.98);border-bottom:1px solid rgba(255,255,255,.1);padding:8px 22px 16px}nav.links.open{display:flex}nav.links a{padding:11px 0;border-bottom:1px solid rgba(255,255,255,.12)}nav.links .btn{margin-top:10px;text-align:center}.menu-toggle{display:block}}
   .page-hero{padding:44px 0 8px}
   .back{display:inline-block;font-size:13px;color:var(--seal);text-decoration:none;margin-bottom:14px;font-weight:600}
@@ -61,9 +62,10 @@
   .doc-btn:hover{border-color:var(--seal);transform:translateY(-2px)}
   .doc-btn svg{flex:none;color:var(--seal)}
   .doc-btn small{display:block;font-weight:500;color:var(--ink-soft);font-size:12px}
-  .cta-band{background:var(--ink);color:var(--paper);border-radius:16px;padding:34px;margin:8px 0;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .cta-band{background:linear-gradient(135deg,#E4231F,#B01319);color:#fff;border-radius:16px;padding:34px;margin:8px 0;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;box-shadow:0 16px 40px rgba(228,35,31,.28)}
   .cta-band h2{font-family:var(--serif);font-size:clamp(22px,3vw,28px);margin:0 0 6px}
-  .cta-band p{margin:0;color:#cfc8ba;font-size:15px;max-width:48ch}
+  .cta-band p{margin:0;color:rgba(255,255,255,.9);font-size:15px;max-width:48ch}
+  .cta-band .btn.soon{background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.32);opacity:1}
   footer{background:var(--card);border-top:1px solid var(--line);margin-top:8px}
   .foot{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:30px;padding:46px 0 24px}
   @media(max-width:760px){.foot{grid-template-columns:1fr;gap:24px}}
@@ -117,7 +119,7 @@
   </div>
 </section>
 
-<section class="wrap" style="padding-bottom:6px">
+<section class="wrap theme-light" style="padding-bottom:6px">
   <div class="handi-note">
     <img src="images/handisport.svg" alt="Logo F&eacute;d&eacute;ration Fran&ccedil;aise Handisport">
     <div>
@@ -128,7 +130,7 @@
 </section>
 
 
-<section class="band">
+<section class="band theme-light">
   <div class="section-pad wrap">
     <h2 class="section">Certificat m&eacute;dical &amp; questionnaire de sant&eacute;</h2>
     <div class="prose">

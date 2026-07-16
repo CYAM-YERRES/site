@@ -7,9 +7,9 @@
 <meta name="description" content="Depuis 1965, le CYAM enseigne à Yerres le judo, l'aïkido, le karaté, le iaïdo et d'autres arts martiaux. La réalisation de soi par la pratique. Inscriptions en ligne saison 2026/2027.">
 <style>
   :root{
-    --paper:#F5F1E8; --card:#FBF8F1; --ink:#1C1A15; --ink-soft:#57524A;
-    --line:#DED6C6; --line-strong:#C9BFAB;
-    --seal:#B23A2E; --seal-soft:#F3E6E2; --seal-ink:#7A2018;
+    --paper:#141210; --card:#1E1B18; --ink:#F4EEE4; --ink-soft:#A79E92;
+    --line:#332D27; --line-strong:#4A4239;
+    --seal:#E4231F; --seal-soft:#2C1512; --seal-ink:#B01319;
     --r:12px;
     --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
     --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
@@ -24,26 +24,30 @@
   .eyebrow::before{content:"";display:inline-block;width:8px;height:8px;background:var(--seal);margin-right:9px;vertical-align:2px}
   h2.section{font-family:var(--serif);font-weight:600;font-size:clamp(24px,3.4vw,34px);margin:.35em 0 .5em;letter-spacing:.01em}
 
+  /* Section claire (crème) — inverse la palette localement pour rythmer la page */
+  .theme-light{--paper:#F5F1E8;--card:#FBF8F1;--ink:#1C1A15;--ink-soft:#57524A;
+    --line:#E4DDCE;--line-strong:#D4CBB8;--seal-soft:#F6E7E4;color:var(--ink)}
+
   /* ---- Nav ---- */
   header.nav{position:sticky;top:0;z-index:30;background:rgba(20,18,14,.95);
     backdrop-filter:saturate(1.1) blur(6px);border-bottom:1px solid rgba(255,255,255,.10)}
   .nav-in{max-width:1080px;margin:0 auto;padding:12px 22px;display:flex;align-items:center;gap:18px}
-  .logo{display:flex;align-items:center;gap:11px;text-decoration:none;font-family:var(--serif);font-weight:600;font-size:20px;letter-spacing:.04em;color:var(--paper)}
+  .logo{display:flex;align-items:center;gap:11px;text-decoration:none;font-family:var(--serif);font-weight:600;font-size:20px;letter-spacing:.04em;color:var(--ink)}
   .logo .seal{width:42px;height:42px;flex:none;border-radius:50%}
   .logo small{display:block;font-family:var(--sans);font-size:9.5px;letter-spacing:.18em;color:rgba(245,241,232,.6);text-transform:uppercase;font-weight:600}
   nav.links{margin-left:auto;display:flex;align-items:center;gap:22px}
-  nav.links a{text-decoration:none;font-size:14.5px;color:var(--paper);font-weight:500;padding:4px 0;border-bottom:2px solid transparent}
+  nav.links a{text-decoration:none;font-size:14.5px;color:var(--ink);font-weight:500;padding:4px 0;border-bottom:2px solid transparent}
   nav.links a:hover{border-color:var(--seal)}
   .btn{display:inline-block;text-decoration:none;font-weight:600;border-radius:9px;padding:10px 18px;font-size:14.5px;cursor:pointer;border:1px solid transparent}
   .btn.primary{background:var(--seal);color:#fff}
   .btn.primary:hover{background:var(--seal-ink)}
-  .btn.ink{background:var(--ink);color:var(--paper)}
+  .btn.ink{background:var(--ink);color:var(--ink)}
   .btn.ink:hover{background:#000}
   .btn.ghost{background:none;border-color:var(--line-strong);color:var(--ink)}
   .btn.ghost:hover{border-color:var(--ink)}
   .btn.soon{background:var(--line);color:var(--ink-soft);border-color:var(--line-strong);
     cursor:not-allowed;pointer-events:none;opacity:.85}
-  .menu-toggle{display:none;margin-left:auto;background:none;border:1px solid rgba(255,255,255,.3);color:var(--paper);border-radius:8px;padding:8px 10px;cursor:pointer}
+  .menu-toggle{display:none;margin-left:auto;background:none;border:1px solid rgba(255,255,255,.3);color:var(--ink);border-radius:8px;padding:8px 10px;cursor:pointer}
   @media(max-width:820px){
     nav.links{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;
       align-items:stretch;gap:0;background:rgba(20,18,14,.98);border-bottom:1px solid rgba(255,255,255,.1);padding:8px 22px 16px}
@@ -62,11 +66,11 @@
   .hero .cta{display:flex;flex-wrap:wrap;gap:12px}
   .brush{margin:34px 0 0;height:14px;width:220px}
   .hero-media{position:relative}
-  .hero-media img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:16px;display:block;box-shadow:0 14px 34px rgba(28,26,21,.16)}
-  .hero .anniv{position:absolute;right:-8px;bottom:-16px;background:var(--paper);border:1px solid var(--line);
-    border-radius:14px;padding:9px 15px;text-align:center;font-family:var(--serif);color:var(--seal);box-shadow:0 8px 20px rgba(28,26,21,.14)}
+  .hero-media img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:16px;display:block;border:1px solid var(--line);box-shadow:0 20px 44px rgba(0,0,0,.55)}
+  .hero .anniv{position:absolute;right:-8px;bottom:-16px;background:var(--seal);border:none;
+    border-radius:14px;padding:10px 16px;text-align:center;font-family:var(--serif);color:#fff;box-shadow:0 10px 26px rgba(228,35,31,.42)}
   .hero .anniv .big{font-size:38px;line-height:1;font-weight:700}
-  .hero .anniv .sub{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--seal-ink)}
+  .hero .anniv .sub{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.85)}
   @media(max-width:820px){.hero .anniv{right:12px;bottom:12px}}
 
   /* ---- Esprit ---- */
@@ -85,8 +89,9 @@
   .disc-intro{max-width:72ch;margin:4px 0 26px;color:var(--ink-soft);font-size:15.5px}
   .disc-intro p{margin:0 0 12px}
   .disc-intro strong{color:var(--ink);font-weight:600}
-  .disc-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;gap:14px;align-items:flex-start;transition:border-color .12s,transform .12s;text-decoration:none;color:inherit;cursor:pointer}
-  .disc-card:hover{border-color:var(--line-strong);transform:translateY(-2px)}
+  .disc-card{--card:#FFFAF0;--ink:#1C1A15;--ink-soft:#57524A;--line:#EBE4D6;--line-strong:#D4CBB8;--seal-soft:#F6E7E4;
+    background:#FFFAF0;color:var(--ink);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;gap:14px;align-items:flex-start;transition:border-color .12s,transform .12s;text-decoration:none;cursor:pointer}
+  .disc-card:hover{border-color:var(--seal);transform:translateY(-2px)}
   .medallion{width:42px;height:42px;flex:none;border-radius:50%;border:1.5px solid var(--seal);color:var(--seal);
     display:grid;place-items:center;font-family:var(--serif);font-size:19px;font-weight:700;background:var(--seal-soft)}
   .disc-card h3{margin:0 0 3px;font-size:16px;font-family:var(--serif);font-weight:600}
@@ -104,20 +109,21 @@
   /* ---- Actualités ---- */
   .news-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
   @media(max-width:760px){.news-grid{grid-template-columns:1fr}}
-  .news{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column}
-  .news .thumb{height:120px;background:var(--seal-soft);position:relative;border-bottom:1px solid var(--line)}
-  .news .thumb .cat{position:absolute;left:12px;top:12px;background:var(--paper);border:1px solid var(--line-strong);border-radius:20px;font-size:11px;font-weight:600;padding:2px 10px}
-  .news .thumb svg{position:absolute;right:12px;bottom:10px;opacity:.5}
-  .news .body{padding:15px 16px 18px}
+  .news{background:#FFFAF0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:border-color .12s,transform .12s}
+  .news:hover{border-color:var(--seal);transform:translateY(-2px)}
+  .news .body{padding:18px 18px 20px}
+  .news .cat{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--seal);background:var(--seal-soft);border:1px solid var(--line-strong);border-radius:20px;padding:4px 11px;margin-bottom:12px}
+  .news .cat svg{width:13px;height:13px;flex:none}
   .news .date{font-size:12px;color:var(--ink-soft);font-family:var(--mono)}
   .news h3{font-family:var(--serif);font-size:18px;margin:4px 0 6px;font-weight:600}
   .news p{font-size:14px;color:var(--ink-soft);margin:0}
 
   /* ---- CTA adhésion ---- */
-  .cta-band{background:var(--ink);color:var(--paper);border-radius:16px;padding:38px;margin:8px 0;
-    display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .cta-band{background:linear-gradient(135deg,#E4231F,#B01319);color:#fff;border-radius:16px;padding:38px;margin:8px 0;
+    display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;box-shadow:0 16px 40px rgba(228,35,31,.28)}
   .cta-band h2{font-family:var(--serif);font-size:clamp(22px,3vw,30px);margin:0 0 6px}
-  .cta-band p{margin:0;color:#cfc8ba;font-size:15px;max-width:46ch}
+  .cta-band p{margin:0;color:rgba(255,255,255,.9);font-size:15px;max-width:46ch}
+  .cta-band .btn.soon{background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.32);opacity:1}
 
   /* ---- Footer ---- */
   footer{background:var(--card);border-top:1px solid var(--line);margin-top:8px}
@@ -168,7 +174,7 @@
   </div>
 </section>
 
-<div class="band">
+<div class="band theme-light">
   <div class="wrap esprit" id="club">
     <div><span class="eyebrow">L'esprit du CYAM</span><h2 class="section" style="margin-top:12px">Apprendre à se connaître pour se réaliser.</h2></div>
     <div>
@@ -189,7 +195,7 @@
   <div class="disc-grid" id="discGrid"></div>
 </section>
 
-<div class="band">
+<div class="band theme-light">
   <section class="section-pad wrap" id="actualites">
     <span class="eyebrow">Actualités</span>
     <h2 class="section">La vie du club.</h2>
@@ -278,7 +284,11 @@ const NEWS = [
     texte:"L'adhésion en ligne est ouverte : choisissez vos disciplines et profitez de la remise famille." },
 ];
 
-const iconDojo = '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#B23A2E" stroke-width="1.5"><path d="M3 10 L12 4 L21 10"/><path d="M5 10 V20 H19 V10"/><path d="M9 20 V14 H15 V20"/></svg>';
+const CAT_ICONS = {
+  "Le club":    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9.5 21v-5h5v5"/></svg>',
+  "Événement":  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>',
+  "Saison":     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.3"/><path d="M21 4v5h-5"/></svg>',
+};
 
 document.getElementById("discGrid").innerHTML = DISCIPLINES.map(d=>`
   <a class="disc-card" href="${d.href}">
@@ -288,8 +298,12 @@ document.getElementById("discGrid").innerHTML = DISCIPLINES.map(d=>`
 
 document.getElementById("newsGrid").innerHTML = NEWS.map(n=>`
   <article class="news">
-    <div class="thumb"><span class="cat">${n.cat}</span>${iconDojo}</div>
-    <div class="body"><div class="date">${n.date}</div><h3>${n.titre}</h3><p>${n.texte}</p></div>
+    <div class="body">
+      <span class="cat">${CAT_ICONS[n.cat]||""}${n.cat}</span>
+      <div class="date">${n.date}</div>
+      <h3>${n.titre}</h3>
+      <p>${n.texte}</p>
+    </div>
   </article>`).join("");
 
 document.getElementById("yr").textContent = new Date().getFullYear();
