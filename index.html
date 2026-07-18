@@ -90,10 +90,9 @@
   .disc-intro p{margin:0 0 12px}
   .disc-intro strong{color:var(--ink);font-weight:600}
   .disc-card{--card:#FFFAF0;--ink:#1C1A15;--ink-soft:#57524A;--line:#EBE4D6;--line-strong:#D4CBB8;--seal-soft:#F6E7E4;
-    background:#FFFAF0;color:var(--ink);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;gap:14px;align-items:flex-start;transition:border-color .12s,transform .12s;text-decoration:none;cursor:pointer}
-  .disc-card:hover{border-color:var(--seal);transform:translateY(-2px)}
-  .medallion{width:42px;height:42px;flex:none;border-radius:50%;border:1.5px solid var(--seal);color:var(--seal);
-    display:grid;place-items:center;font-family:var(--serif);font-size:19px;font-weight:700;background:var(--seal-soft)}
+    background:#FFFAF0;color:var(--ink);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;gap:14px;align-items:flex-start;transition:border-color .15s,transform .15s,background-color .2s,color .2s;text-decoration:none;cursor:pointer}
+  .disc-card:hover{border-color:var(--seal);background:#F6EDDB;transform:translateY(-2px)}
+  .medallion{width:48px;height:48px;flex:none;border-radius:50%;object-fit:cover;display:block}
   .disc-card h3{margin:0 0 3px;font-size:16px;font-family:var(--serif);font-weight:600}
   .disc-card p{margin:0;font-size:13.5px;color:var(--ink-soft)}
   .disc-card .new{display:inline-block;font-size:10.5px;font-weight:700;color:#fff;background:var(--seal);border-radius:20px;padding:1px 8px;margin-left:6px;vertical-align:2px}
@@ -109,8 +108,7 @@
   /* ---- Actualités ---- */
   .news-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
   @media(max-width:760px){.news-grid{grid-template-columns:1fr}}
-  .news{background:#FFFAF0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:border-color .12s,transform .12s}
-  .news:hover{border-color:var(--seal);transform:translateY(-2px)}
+  .news{background:#F6EDDB;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column}
   .news .body{padding:18px 18px 20px}
   .news .cat{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--seal);background:var(--seal-soft);border:1px solid var(--line-strong);border-radius:20px;padding:4px 11px;margin-bottom:12px}
   .news .cat svg{width:13px;height:13px;flex:none}
@@ -119,10 +117,11 @@
   .news p{font-size:14px;color:var(--ink-soft);margin:0}
 
   /* ---- CTA adhésion ---- */
-  .cta-band{background:linear-gradient(135deg,#E4231F,#B01319);color:#fff;border-radius:16px;padding:38px;margin:8px 0;
-    display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;box-shadow:0 16px 40px rgba(228,35,31,.28)}
-  .cta-band h2{font-family:var(--serif);font-size:clamp(22px,3vw,30px);margin:0 0 6px}
-  .cta-band p{margin:0;color:rgba(255,255,255,.9);font-size:15px;max-width:46ch}
+  .cta-band{background:linear-gradient(135deg,#E4231F,#B01319);color:#fff;border-radius:16px;padding:34px 38px;margin:8px 0;
+    display:flex;flex-direction:column;gap:14px;box-shadow:0 16px 40px rgba(228,35,31,.28)}
+  .cta-head{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .cta-band h2{font-family:var(--serif);font-size:clamp(22px,3vw,30px);margin:0}
+  .cta-band p{margin:0;color:rgba(255,255,255,.9);font-size:15px;max-width:none}
   .cta-band .btn.soon{background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.32);opacity:1}
 
   /* ---- Footer ---- */
@@ -218,11 +217,11 @@
 
 <section class="section-pad wrap">
   <div class="cta-band">
-    <div>
+    <div class="cta-head">
       <h2>Inscriptions en ligne bientôt disponibles</h2>
-      <p>L'adhésion en ligne pour la saison 2026/2027 ouvrira très prochainement. En attendant, contactez le club pour toute information.</p>
+      <span class="btn soon" aria-disabled="true" style="font-size:16px;padding:14px 24px">Bientôt disponible</span>
     </div>
-    <span class="btn soon" aria-disabled="true" style="font-size:16px;padding:14px 24px">Bientôt disponible</span>
+    <p>L'adhésion en ligne pour la saison 2026/2027 ouvrira très prochainement. En attendant, contactez le club pour toute information.</p>
   </div>
 </section>
 
@@ -292,7 +291,7 @@ const CAT_ICONS = {
 
 document.getElementById("discGrid").innerHTML = DISCIPLINES.map(d=>`
   <a class="disc-card" href="${d.href}">
-    <div class="medallion">${d.k}</div>
+    <img class="medallion" src="images/picto-${d.href.replace('.html','')}.png" alt="" width="48" height="48">
     <div><h3>${d.nom}${d.neuf?'<span class="new">Nouveau</span>':""}</h3><p>${d.desc}</p></div>
   </a>`).join("");
 
