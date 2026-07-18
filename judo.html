@@ -62,9 +62,10 @@
   .doc-btn:hover{border-color:var(--seal);transform:translateY(-2px)}
   .doc-btn svg{flex:none;color:var(--seal)}
   .doc-btn small{display:block;font-weight:500;color:var(--ink-soft);font-size:12px}
-  .cta-band{background:linear-gradient(135deg,#E4231F,#B01319);color:#fff;border-radius:16px;padding:34px;margin:8px 0;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;box-shadow:0 16px 40px rgba(228,35,31,.28)}
-  .cta-band h2{font-family:var(--serif);font-size:clamp(22px,3vw,28px);margin:0 0 6px}
-  .cta-band p{margin:0;color:rgba(255,255,255,.9);font-size:15px;max-width:48ch}
+  .cta-band{background:linear-gradient(135deg,#E4231F,#B01319);color:#fff;border-radius:16px;padding:32px 34px;margin:8px 0;display:flex;flex-direction:column;gap:14px;box-shadow:0 16px 40px rgba(228,35,31,.28)}
+  .cta-head{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .cta-band h2{font-family:var(--serif);font-size:clamp(22px,3vw,28px);margin:0}
+  .cta-band p{margin:0;color:rgba(255,255,255,.9);font-size:15px;max-width:none}
   .cta-band .btn.soon{background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.32);opacity:1}
   footer{background:var(--card);border-top:1px solid var(--line);margin-top:8px}
   .foot{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:30px;padding:46px 0 24px}
@@ -79,6 +80,7 @@
   .sante-title{font-family:var(--serif);font-weight:600;font-size:18px;margin:0 0 14px}
   .prose-wide{max-width:none}
   .prose-wide p{font-size:14.5px}
+  @media(max-width:1080px){.wrap{padding-left:20px;padding-right:20px}}
 </style>
 </head>
 <body>
@@ -159,11 +161,11 @@
 
 <section class="section-pad wrap">
   <div class="cta-band">
-    <div>
+    <div class="cta-head">
       <h2>Envie de nous rejoindre&nbsp;?</h2>
-      <p>Adh&eacute;rez au CYAM pour la saison 2026/2027 et pratiquez le Judo &agrave; Yerres.</p>
+      <span class="btn soon" aria-disabled="true" style="font-size:16px;padding:14px 24px">Adh&eacute;sion &mdash; bient&ocirc;t</span>
     </div>
-    <span class="btn soon" aria-disabled="true" style="font-size:16px;padding:14px 24px">Adh&eacute;sion &mdash; bient&ocirc;t</span>
+    <p>Adh&eacute;rez au CYAM pour la saison 2026/2027 et pratiquez le Judo &agrave; Yerres.</p>
   </div>
 </section>
 
