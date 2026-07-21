@@ -9,3 +9,6 @@ Desktop.ini
 # Fichiers temporaires
 *~
 *.tmp
+
+# Secrets HelloAsso (ne jamais committer)
+helloasso/config.php
