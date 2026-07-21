@@ -46,8 +46,18 @@
   @media(max-width:900px){.grid{grid-template-columns:1fr}}
 
   /* Cartes */
-  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+  .card{--ink:#1C1A15;--ink-soft:#57524A;--line:#E4DDCE;--line-strong:#D4CBB8;--surface:#ffffff;
+    background:#FBF8F1;color:var(--ink);border:1px solid var(--line);border-radius:var(--r);padding:20px}
   .card + .card{margin-top:16px}
+
+  /* Autocomplétion adresse */
+  .ac-wrap{position:relative}
+  .ac-list{position:absolute;left:0;right:0;top:100%;z-index:8;background:#fff;border:1px solid #D4CBB8;border-top:none;
+    border-radius:0 0 8px 8px;max-height:230px;overflow:auto;box-shadow:0 10px 24px rgba(0,0,0,.14)}
+  .ac-list:empty{display:none}
+  .ac-item{padding:9px 12px;font-size:14px;color:#1C1A15;cursor:pointer;border-top:1px solid #EDE6D8}
+  .ac-item:first-child{border-top:none}
+  .ac-item:hover{background:#F6E7E4}
   .adh-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
   .adh-head h2{font-family:var(--serif);font-size:19px;margin:0;font-weight:600;display:flex;align-items:center;gap:10px}
   .adh-idx{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--seal);color:#fff;font-size:13px;font-weight:700}
@@ -160,7 +170,14 @@
 
       <div class="card" style="margin-top:16px">
         <div class="adh-head"><h2>Contact du foyer</h2></div>
-        <div class="fields" style="grid-template-columns:1fr 1fr">
+        <div class="fields" style="grid-template-columns:1fr">
+          <div class="field ac-wrap">
+            <label for="adresse">Adresse du foyer</label>
+            <input id="adresse" type="text" placeholder="Commencez à saisir votre adresse…" autocomplete="off">
+            <div class="ac-list" id="acList" role="listbox"></div>
+          </div>
+        </div>
+        <div class="fields" style="grid-template-columns:1fr 1fr;margin-top:12px">
           <div class="field"><label for="email">E-mail (confirmation & reçu)</label>
             <input id="email" type="email" placeholder="prenom.nom@exemple.fr" autocomplete="email"></div>
           <div class="field"><label for="tel">Téléphone</label>
@@ -353,6 +370,30 @@ A.addEventListener("click",e=>{
 document.getElementById("addAdh").addEventListener("click",()=>{state.adherents.push(nouvelAdherent()); renderForm();});
 document.getElementById("email").addEventListener("input",e=>state.contact.email=e.target.value);
 document.getElementById("tel").addEventListener("input",e=>state.contact.tel=e.target.value);
+
+/* ---------- autocomplétion adresse (Base Adresse Nationale, gratuite) ---------- */
+const adrInput=document.getElementById("adresse"), acList=document.getElementById("acList");
+let acTimer;
+adrInput.addEventListener("input",()=>{
+  state.contact.adresse=adrInput.value; state.contact.cp=""; state.contact.ville="";
+  clearTimeout(acTimer);
+  const q=adrInput.value.trim();
+  if(q.length<4){acList.innerHTML="";return;}
+  acTimer=setTimeout(()=>{
+    fetch("https://api-adresse.data.gouv.fr/search/?limit=5&q="+encodeURIComponent(q))
+      .then(r=>r.json())
+      .then(d=>{acList.innerHTML=(d.features||[]).map(f=>{const p=f.properties;
+        return `<div class="ac-item" role="option" data-label="${esc(p.label)}" data-cp="${esc(p.postcode||"")}" data-ville="${esc(p.city||"")}">${esc(p.label)}</div>`;}).join("");})
+      .catch(()=>{acList.innerHTML="";});
+  },250);
+});
+acList.addEventListener("click",e=>{
+  const it=e.target.closest(".ac-item"); if(!it) return;
+  adrInput.value=it.dataset.label;
+  state.contact.adresse=it.dataset.label; state.contact.cp=it.dataset.cp; state.contact.ville=it.dataset.ville;
+  acList.innerHTML="";
+});
+document.addEventListener("click",e=>{ if(!e.target.closest(".ac-wrap")) acList.innerHTML=""; });
 document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{
   mode=+b.dataset.mode; document.querySelectorAll(".seg button").forEach(x=>x.classList.toggle("on",x===b)); renderReceipt();
 }));
