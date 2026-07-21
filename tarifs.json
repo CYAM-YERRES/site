@@ -1,0 +1,473 @@
+{
+  "saison": "2026/2027",
+  "remise": {
+    "taux": 0.15,
+    "regle": "tous_sauf_le_plus_cher",
+    "libelle": "−15 % sur chaque adhésion sauf la plus chère du panier"
+  },
+  "disciplines": [
+    {
+      "id": "aikido",
+      "nom": "Aikido",
+      "categories": [
+        {
+          "nom": "8-13 ans",
+          "cours": [
+            {
+              "code": "A1",
+              "horaire": "Lun & jeudi 18h45 (1h)",
+              "tarif": 225
+            }
+          ]
+        },
+        {
+          "nom": "14-15 ans",
+          "cours": [
+            {
+              "code": "A2",
+              "horaire": "Lun & jeudi 18h45 (1h)",
+              "tarif": 234
+            }
+          ]
+        },
+        {
+          "nom": "15-18 ans",
+          "cours": [
+            {
+              "code": "A3",
+              "horaire": "Lun & jeudi 18h45 (1h)",
+              "tarif": 234
+            }
+          ]
+        },
+        {
+          "nom": "Adulte",
+          "cours": [
+            {
+              "code": "A4",
+              "horaire": "Lun & jeudi 20h (1h30) Mardi 20h30 (Gradés) (1h30)",
+              "tarif": 240
+            }
+          ]
+        },
+        {
+          "nom": "Senior",
+          "cours": [
+            {
+              "code": "A5",
+              "horaire": "Lun & jeudi 17h (1h15)",
+              "tarif": 240
+            }
+          ]
+        },
+        {
+          "nom": "Ceintures noires",
+          "cours": [
+            {
+              "code": "A6",
+              "horaire": "",
+              "tarif": 201
+            }
+          ]
+        },
+        {
+          "nom": "Enseignant, Assistant",
+          "cours": [
+            {
+              "code": "A7",
+              "horaire": "",
+              "tarif": 89
+            }
+          ]
+        },
+        {
+          "nom": "Représentant CD",
+          "cours": [
+            {
+              "code": "A8",
+              "horaire": "",
+              "tarif": 69
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "iaido",
+      "nom": "Iaido",
+      "categories": [
+        {
+          "nom": "Ado 12-15 ans",
+          "cours": [
+            {
+              "code": "I1",
+              "horaire": "Lun 19h et 20h30 + mar. 19h15 et 21h + sam 9h et 10h30",
+              "tarif": 162
+            }
+          ]
+        },
+        {
+          "nom": "Adulte (+15 ans)",
+          "cours": [
+            {
+              "code": "I2",
+              "horaire": "Lun 19h et 20h30 + mar. 19h15 et 21h + sam 9h et 10h30",
+              "tarif": 249
+            }
+          ]
+        },
+        {
+          "nom": "Adulte extérieur",
+          "cours": [
+            {
+              "code": "I3",
+              "horaire": "Lic & adhésion seules",
+              "tarif": 77
+            }
+          ]
+        },
+        {
+          "nom": "Enseignant, assistant",
+          "cours": [
+            {
+              "code": "I4",
+              "horaire": "",
+              "tarif": 77
+            }
+          ]
+        },
+        {
+          "nom": "Sans licence",
+          "cours": [
+            {
+              "code": "I5",
+              "horaire": "Sans licence",
+              "tarif": 193
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "karate-shotokan",
+      "nom": "Karaté Shotokan",
+      "categories": [
+        {
+          "nom": "4-6 ans",
+          "cours": [
+            {
+              "code": "KS1",
+              "horaire": "Samedi 10h30",
+              "tarif": 186
+            }
+          ]
+        },
+        {
+          "nom": "Débutant 6-12 ans",
+          "cours": [
+            {
+              "code": "KS2",
+              "horaire": "Mar 18h30,ven 19h",
+              "tarif": 267
+            }
+          ]
+        },
+        {
+          "nom": "Gradé 6-12 ans",
+          "cours": [
+            {
+              "code": "KS3",
+              "horaire": "Mer & vend 19h & sam 15h",
+              "tarif": 267
+            }
+          ]
+        },
+        {
+          "nom": "Elites compétiteurs",
+          "cours": [
+            {
+              "code": "KS4",
+              "horaire": "Idem section gradés + Samedi 11h30",
+              "tarif": 267
+            }
+          ]
+        },
+        {
+          "nom": "Ado., adulte",
+          "cours": [
+            {
+              "code": "KS5",
+              "horaire": "Mer & vend 20h + sam 15h",
+              "tarif": 267
+            }
+          ]
+        },
+        {
+          "nom": "Enseignant, assistant",
+          "cours": [
+            {
+              "code": "KS6",
+              "horaire": "",
+              "tarif": 72
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "body-karate",
+      "nom": "Body Karaté",
+      "categories": [
+        {
+          "nom": "Adulte",
+          "cours": [
+            {
+              "code": "BK1",
+              "horaire": "Samedi de 10h à 11h30",
+              "tarif": 171
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "kobudo-shorin-ryu",
+      "nom": "Kobudo Shorin Ryu",
+      "categories": [
+        {
+          "nom": "Adulte",
+          "cours": [
+            {
+              "code": "K1",
+              "horaire": "Mer 19h à 22h Kobudo + sam. 9h30 et 12h30",
+              "tarif": 195
+            }
+          ]
+        },
+        {
+          "nom": "Enseignant, assistant",
+          "cours": [
+            {
+              "code": "K2",
+              "horaire": "",
+              "tarif": 75
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nihon-tai-jitsu",
+      "nom": "Nihon Tai-Jitsu",
+      "categories": [
+        {
+          "nom": "Adulte",
+          "cours": [
+            {
+              "code": "NT1",
+              "horaire": "Lun & jeud 20h",
+              "tarif": 249
+            }
+          ]
+        },
+        {
+          "nom": "Enseignant, assistant",
+          "cours": [
+            {
+              "code": "NT2",
+              "horaire": "",
+              "tarif": 91
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "judo",
+      "nom": "Judo",
+      "categories": [
+        {
+          "nom": "4-5 ans Formule découverte 3 mois",
+          "cours": [
+            {
+              "code": "J0",
+              "horaire": "Formule découverte 3 mois",
+              "tarif": 75
+            }
+          ]
+        },
+        {
+          "nom": "4-5 ans",
+          "cours": [
+            {
+              "code": "J1",
+              "horaire": "Mardi 17h (1h00)",
+              "tarif": 228
+            },
+            {
+              "code": "J2",
+              "horaire": "Mer. 13h30 (1h00)",
+              "tarif": 228
+            },
+            {
+              "code": "J3",
+              "horaire": "Mer.16h (1h00)",
+              "tarif": 228
+            },
+            {
+              "code": "J4",
+              "horaire": "Vend. 17h (1h00)",
+              "tarif": 228
+            },
+            {
+              "code": "J5",
+              "horaire": "Sam. 13h30 (1h00)",
+              "tarif": 228
+            }
+          ]
+        },
+        {
+          "nom": "6-7 ans",
+          "cours": [
+            {
+              "code": "J6",
+              "horaire": "Mer. 14h30 (1h30)",
+              "tarif": 282
+            },
+            {
+              "code": "J7",
+              "horaire": "Sam.14h30 (1h00)",
+              "tarif": 228
+            },
+            {
+              "code": "J8",
+              "horaire": "Mer. 14h30 + Sam. 14h30",
+              "tarif": 345
+            }
+          ]
+        },
+        {
+          "nom": "8-10 ans",
+          "cours": [
+            {
+              "code": "J9",
+              "horaire": "Mer. 17h (1h30)",
+              "tarif": 282
+            },
+            {
+              "code": "J10",
+              "horaire": "Sam. 15h30 (1h00)",
+              "tarif": 228
+            },
+            {
+              "code": "J11",
+              "horaire": "Mer. 17h + Sam. 15h30",
+              "tarif": 345
+            }
+          ]
+        },
+        {
+          "nom": "Ado.",
+          "cours": [
+            {
+              "code": "J12",
+              "horaire": "Mardi 18h (1h30) + Vend. 18h (1h)",
+              "tarif": 300
+            },
+            {
+              "code": "J13",
+              "horaire": "Mar.+ Vend. + 1h Tech. perso. mer. 19h30",
+              "tarif": 366
+            }
+          ]
+        },
+        {
+          "nom": "Ado. renforce.",
+          "cours": [
+            {
+              "code": "J14",
+              "horaire": "Merc. 18h30 (1h00)",
+              "tarif": 249
+            },
+            {
+              "code": "J15",
+              "horaire": "Vend. 18h (1h00)",
+              "tarif": 249
+            },
+            {
+              "code": "J16",
+              "horaire": "Mer. 19h30 + Ven. 18h",
+              "tarif": 273
+            }
+          ]
+        },
+        {
+          "nom": "Adulte",
+          "cours": [
+            {
+              "code": "J17",
+              "horaire": "Mardi 20h30 (1h30)",
+              "tarif": 249
+            },
+            {
+              "code": "J18",
+              "horaire": "Vend. 20h30 (1h30)",
+              "tarif": 249
+            },
+            {
+              "code": "J19",
+              "horaire": "Mardi + Vend. 20h30",
+              "tarif": 300
+            }
+          ]
+        },
+        {
+          "nom": "Enseignant, assistant",
+          "cours": [
+            {
+              "code": "J20",
+              "horaire": "",
+              "tarif": 85
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "taiso",
+      "nom": "Taïso",
+      "categories": [
+        {
+          "nom": "Adulte",
+          "cours": [
+            {
+              "code": "T1",
+              "horaire": "Mardi 19h30 (1h)",
+              "tarif": 249
+            },
+            {
+              "code": "T2",
+              "horaire": "Vendredi 19h (1h30)",
+              "tarif": 249
+            },
+            {
+              "code": "T3",
+              "horaire": "Combo 2 séances (2h30)",
+              "tarif": 289
+            }
+          ]
+        },
+        {
+          "nom": "Enseignant, assistant",
+          "cours": [
+            {
+              "code": "T4",
+              "horaire": "",
+              "tarif": 80
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
