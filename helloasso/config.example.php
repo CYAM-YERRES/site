@@ -1,11 +1,11 @@
 <?php
 /* ============================================================
-   CYAM Yerres — Configuration du paiement HelloAsso
+   CYAM Yerres — Modèle de configuration HelloAsso
    ------------------------------------------------------------
-   ⚠️  RENSEIGNEZ VOS CLÉS CI-DESSOUS (HelloAsso → Mon compte →
-       Ma clé API). Ne partagez JAMAIS ce fichier ni votre
-       clientSecret. Ce fichier PHP n'est jamais visible par les
-       visiteurs (il s'exécute côté serveur).
+   👉 COPIEZ ce fichier en « config.php » (dans le même dossier)
+      puis renseignez vos clés. Le vrai « config.php » n'est PAS
+      suivi par Git (il contient votre secret) : il ne vit que
+      sur votre PC et sur le serveur.
    ============================================================ */
 
 // --- Vos identifiants HelloAsso -----------------------------
