@@ -415,12 +415,12 @@ document.getElementById("pay").addEventListener("click",async()=>{
   pay.disabled=true; pay.textContent="Redirection vers le paiement…";
   try{
     const res=await fetch(CHECKOUT_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
-    if(!res.ok) throw new Error("HTTP "+res.status);
-    const data=await res.json();
-    if(data.redirectUrl){ window.location.href=data.redirectUrl; return; }
-    throw new Error(data.error||"Réponse inattendue");
+    let data=null; try{ data=await res.json(); }catch(_){}
+    if(res.ok && data && data.redirectUrl){ window.location.href=data.redirectUrl; return; }
+    if(data && data.error){ alert("Paiement indisponible : "+data.error); pay.disabled=false; pay.textContent=old; return; }
+    throw new Error("indisponible");
   }catch(err){
-    // Module serveur pas encore en place -> aperçu du récapitulatif
+    // Pont serveur pas encore déployé (pas de réponse JSON) -> aperçu du récapitulatif
     document.getElementById("payload").textContent=JSON.stringify(payload,null,2);
     document.getElementById("modal").classList.add("on");
     pay.disabled=false; pay.textContent=old;
