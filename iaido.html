@@ -81,6 +81,19 @@
   .prose ul{margin:0 0 16px;padding-left:20px}
   .prose li{font-size:16.5px;color:var(--ink-soft);margin:5px 0}
   @media(max-width:1080px){.wrap{padding-left:20px;padding-right:20px}}
+  .schedule{margin-top:30px;background:var(--card);border:1px solid var(--line);border-left:4px solid #C9A24B;border-radius:14px;padding:24px 26px}
+  .schedule h2{font-family:var(--serif);font-weight:600;font-size:21px;margin:0;color:var(--ink)}
+  .schedule .sub{font-size:13px;color:var(--ink-soft);margin:4px 0 16px}
+  .sched-list{display:grid;gap:0}
+  .sched-row{display:grid;grid-template-columns:190px 1fr;gap:18px;align-items:baseline;padding:13px 0;border-top:1px dotted var(--line)}
+  .sched-row:first-child{border-top:none}
+  .sched-cat{font-weight:700;color:#D9B85F;font-size:14.5px}
+  .sched-hours{display:flex;flex-wrap:wrap;gap:8px}
+  .sched-hours span{background:var(--paper);border:1px solid var(--line-strong);border-radius:999px;padding:5px 12px;font-size:13px;color:var(--ink-soft)}
+  .sched-foot{margin:18px 0 0;font-size:13.5px;color:var(--ink-soft)}
+  .sched-foot a{color:#D9B85F;font-weight:600;text-decoration:none}
+  .sched-foot a:hover{text-decoration:underline}
+  @media(max-width:600px){.sched-row{grid-template-columns:1fr;gap:5px}}
 </style>
 </head>
 <body>
@@ -132,6 +145,22 @@
       </ul>
     </div>
     <div class="media"><img class="disc-photo" src="images/disc-iaido.jpg" alt="Iaïdo au CYAM Yerres" loading="lazy"></div>
+  </div>
+
+  <div class="schedule">
+    <h2>Créneaux &amp; horaires</h2>
+    <p class="sub">Saison 2026/2027 — trouvez le cours qui vous convient</p>
+    <div class="sched-list">
+      <div class="sched-row">
+        <div class="sched-cat">Ado 12-15 ans</div>
+        <div class="sched-hours"><span>Lun 19h et 20h30 + mar. 19h15 et 21h + sam 9h et 10h30</span></div>
+      </div>
+      <div class="sched-row">
+        <div class="sched-cat">Adulte (+15 ans)</div>
+        <div class="sched-hours"><span>Lun 19h et 20h30 + mar. 19h15 et 21h + sam 9h et 10h30</span></div>
+      </div>
+    </div>
+    <p class="sched-foot">Tarifs et inscription en ligne sur la page <a href="adhesion.html">adhésion</a>.</p>
   </div>
 </section>
 
