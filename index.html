@@ -39,8 +39,9 @@
   nav.links a{text-decoration:none;font-size:14.5px;color:var(--ink);font-weight:500;padding:4px 0;border-bottom:2px solid transparent}
   nav.links a:hover{border-color:var(--seal)}
   .btn{display:inline-block;text-decoration:none;font-weight:600;border-radius:9px;padding:10px 18px;font-size:14.5px;cursor:pointer;border:1px solid transparent}
-  .btn.primary{background:var(--seal);color:#fff}
-  .btn.primary:hover{background:var(--seal-ink)}
+  .btn.primary{background:#4ca44c;color:#fff}
+  .btn.primary:hover{background:var(--seal)}
+  nav.links .btn.primary{padding-left:30px;padding-right:30px}
   .btn.ink{background:var(--ink);color:var(--ink)}
   .btn.ink:hover{background:#000}
   .btn.ghost{background:none;border-color:var(--line-strong);color:var(--ink)}
@@ -126,7 +127,7 @@
 
   /* ---- Footer ---- */
   footer{background:var(--card);border-top:1px solid var(--line);margin-top:8px}
-  .foot{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:30px;padding:46px 0 24px}
+  .foot{display:grid;grid-template-columns:1.4fr 1fr;gap:30px;padding:46px 0 24px}
   @media(max-width:760px){.foot{grid-template-columns:1fr;gap:24px}}
   .foot h4{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--seal);margin:0 0 12px;font-weight:600}
   .foot p,.foot a{font-size:14px;color:var(--ink-soft);margin:5px 0;text-decoration:none;display:block}
@@ -220,19 +221,8 @@
     <div>
       <h4>Le club</h4>
       <p>Club Yerrois d'Arts Martiaux<br>13 Rue Lucien Mânes<br>91330 Yerres, France</p>
-      <p>Responsable : Jean-Luc Riu<br>06 58 49 34 99</p>
+      <p>Président : Jean-Luc Riu<br>06 58 49 34 99</p>
       <a href="mailto:jeanluc.riu@cyamyerres.fr">jeanluc.riu@cyamyerres.fr</a>
-    </div>
-    <div>
-      <h4>Horaires du dojo</h4>
-      <div class="hours">
-        <span><b>Lundi</b> 17h – 21h30</span>
-        <span><b>Mardi</b> 17h – 22h</span>
-        <span><b>Mercredi</b> 14h30 – 22h</span>
-        <span><b>Jeudi</b> 17h – 21h30</span>
-        <span><b>Vendredi</b> 17h – 21h30</span>
-        <span><b>Samedi</b> 9h – 16h30</span>
-      </div>
     </div>
     <div>
       <h4>Naviguer</h4>
@@ -258,9 +248,9 @@ const DISCIPLINES = [
   { k:"A",  nom:"Aïkido",          desc:"L'art de l'harmonie : neutraliser sans détruire.", href:"aikido.html" },
   { k:"K",  nom:"Karaté Shotokan", desc:"Puissance, précision et maîtrise des techniques pieds-poings.", href:"karate.html" },
   { k:"N",  nom:"Nihon Taï-Jitsu", desc:"Self-défense japonaise, efficace et complète.", href:"nihon-tai-jitsu.html" },
-  { k:"Ko", nom:"Kobudo",          desc:"Maniement des armes traditionnelles d'Okinawa.", href:"kobudo.html" },
+  { k:"Ko", nom:"Kobudo & Shorin Ryu",          desc:"Maniement des armes traditionnelles d'Okinawa.", href:"kobudo.html" },
   { k:"I",  nom:"Iaïdo",           desc:"L'art du sabre, concentration et geste juste.", href:"iaido.html" },
-  { k:"T",  nom:"Taïso & Yoga",    desc:"Préparation physique douce, souffle et souplesse.", href:"taiso.html" },
+  { k:"T",  nom:"Taïso",    desc:"Préparation physique douce, souffle et souplesse.", href:"taiso.html" },
   { k:"B",  nom:"Body Karaté",     desc:"Le karaté en musique, cardio et tonus pour tous.", href:"body-karate.html" },
 ];
 
