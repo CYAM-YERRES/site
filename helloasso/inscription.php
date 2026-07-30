@@ -49,6 +49,12 @@ $adresse = $contact['adresse'] ?? '';
 $cp      = $contact['cp'] ?? '';
 $ville   = $contact['ville'] ?? '';
 
+/* ---------- contact du foyer obligatoire ---------- */
+$telNum = preg_replace('/\s+/', '', (string)$tel);
+if (trim($adresse) === '') ifail("Merci d'indiquer l'adresse du foyer.");
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) ifail('Adresse e-mail invalide.');
+if (!preg_match('/^0[1-9]\d{8}$/', $telNum)) ifail('Numéro de téléphone invalide (format attendu : 06 07 08 09 10).');
+
 /* ---------- référence d'inscription ---------- */
 try { $rand = strtoupper(bin2hex(random_bytes(2))); } catch (Exception $e) { $rand = strtoupper(dechex(mt_rand(0, 65535))); }
 $ref = 'INS-' . date('ymd-His') . '-' . substr($rand, 0, 4);

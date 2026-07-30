@@ -116,6 +116,9 @@
   .paymode .lab{font-size:12px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.02em;margin:12px 0 8px}
   .paymethod{padding:0 18px 4px}
   .paymethod .lab{font-size:12px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.02em;margin:12px 0 8px}
+  .req{color:var(--seal);font-weight:700}
+  .hint{display:block;margin-top:5px;font-size:11.5px;color:var(--ink-soft)}
+  .field input.invalid{border-color:var(--seal);box-shadow:0 0 0 2px var(--seal-soft)}
   .seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .seg button{padding:10px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);border-radius:9px;font:inherit;font-weight:600;font-size:14px;cursor:pointer}
   .seg button.on{border-color:var(--seal);background:var(--seal-soft);color:#fff}
@@ -178,16 +181,17 @@
         <div class="adh-head"><h2>Contact du foyer</h2></div>
         <div class="fields" style="grid-template-columns:1fr">
           <div class="field ac-wrap">
-            <label for="adresse">Adresse du foyer</label>
-            <input id="adresse" type="text" placeholder="Commencez à saisir votre adresse…" autocomplete="off">
+            <label for="adresse">Adresse du foyer <span class="req">*</span></label>
+            <input id="adresse" type="text" placeholder="Commencez à saisir votre adresse…" autocomplete="off" required>
             <div class="ac-list" id="acList" role="listbox"></div>
           </div>
         </div>
         <div class="fields" style="grid-template-columns:1fr 1fr;margin-top:12px">
-          <div class="field"><label for="email">E-mail (confirmation & reçu)</label>
-            <input id="email" type="email" placeholder="prenom.nom@exemple.fr" autocomplete="email"></div>
-          <div class="field"><label for="tel">Téléphone</label>
-            <input id="tel" type="tel" placeholder="06 12 34 56 78" autocomplete="tel"></div>
+          <div class="field"><label for="email">E-mail (confirmation & reçu) <span class="req">*</span></label>
+            <input id="email" type="email" placeholder="prenom.nom@exemple.fr" autocomplete="email" required></div>
+          <div class="field"><label for="tel">Téléphone <span class="req">*</span></label>
+            <input id="tel" type="tel" placeholder="06 07 08 09 10" autocomplete="tel" inputmode="numeric" maxlength="14" required>
+            <small class="hint">Format&nbsp;: 06 07 08 09 10 (sans +33)</small></div>
         </div>
       </div>
     </main>
@@ -392,8 +396,18 @@ A.addEventListener("click",e=>{
   if(dr){const [aid,iid]=dr.split("|"); const a=find(aid); a.cours=a.cours.filter(c=>String(c.id)!==iid); if(!a.cours.length)a.cours.push(nouvelInscription()); renderForm(); renderReceipt();}
 });
 document.getElementById("addAdh").addEventListener("click",()=>{state.adherents.push(nouvelAdherent()); renderForm();});
-document.getElementById("email").addEventListener("input",e=>state.contact.email=e.target.value);
-document.getElementById("tel").addEventListener("input",e=>state.contact.tel=e.target.value);
+document.getElementById("email").addEventListener("input",e=>{state.contact.email=e.target.value; e.target.classList.remove("invalid");});
+function formatTel(v){
+  let d=String(v).replace(/\D/g,"");                       // chiffres seulement (retire +, espaces…)
+  if(d.startsWith("0033"))               d="0"+d.slice(4); // 0033 6… -> 0 6…
+  else if(d.startsWith("33") && d.length>=11) d="0"+d.slice(2); // +33 6… -> 0 6… (France uniquement)
+  d=d.slice(0,10);
+  return d.replace(/(\d{2})(?=\d)/g,"$1 ");                // groupes de 2 : 06 07 08 09 10
+}
+document.getElementById("tel").addEventListener("input",e=>{
+  const f=formatTel(e.target.value); e.target.value=f; state.contact.tel=f; e.target.classList.remove("invalid");
+});
+document.getElementById("adresse").addEventListener("input",e=>e.target.classList.remove("invalid"));
 
 /* ---------- autocomplétion adresse (Base Adresse Nationale, gratuite) ---------- */
 const adrInput=document.getElementById("adresse"), acList=document.getElementById("acList");
@@ -436,6 +450,18 @@ function buildPayload(){
     adherents:state.adherents.filter(a=>a.cours.some(c=>coursTarif(c))).map(a=>({prenom:a.prenom,nom:a.nom,naissance:a.naissance}))
   };
 }
+/* ---------- validation « Contact du foyer » (obligatoire) ---------- */
+function validateFoyer(){
+  const adr=(state.contact.adresse||"").trim();
+  const email=(state.contact.email||"").trim();
+  const tel=(state.contact.tel||"").replace(/\s/g,"");
+  const mark=(id,bad)=>{const el=document.getElementById(id); if(el)el.classList.toggle("invalid",bad); return el;};
+  mark("adresse",false); mark("email",false); mark("tel",false);
+  if(!adr){ mark("adresse",true).focus(); alert("Merci d'indiquer l'adresse du foyer avant de valider votre inscription."); return false; }
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ mark("email",true).focus(); alert("Merci d'indiquer une adresse e-mail valide avant de valider votre inscription."); return false; }
+  if(!/^0[1-9]\d{8}$/.test(tel)){ mark("tel",true).focus(); alert("Numéro de téléphone invalide.\nUtilisez le format 06 07 08 09 10 (10 chiffres, sans +33)."); return false; }
+  return true;
+}
 async function submitInscription(){
   const payload=buildPayload();
   const pay=document.getElementById("pay"); const old=pay.textContent;
@@ -452,6 +478,7 @@ async function submitInscription(){
   pay.disabled=false; pay.textContent=old;
 }
 document.getElementById("pay").addEventListener("click",async()=>{
+  if(!validateFoyer()) return;
   if(payMethod==="cheque"){ return submitInscription(); }
   const payload=buildPayload();
   const pay=document.getElementById("pay"); const old=pay.textContent;
