@@ -14,6 +14,8 @@ class MiniPDF {
     private $buf = '';
     private $fs = 10;
     private $ff = 'F1';
+    private $images = [];
+    private $imgDims = [];
 
     function setFont($size, $bold = false) { $this->fs = $size; $this->ff = $bold ? 'F2' : 'F1'; }
 
@@ -40,23 +42,70 @@ class MiniPDF {
         $y1 = $this->h - $y1Top; $y2 = $this->h - $y2Top;
         $this->buf .= "{$lw} w {$x1} {$y1} m {$x2} {$y2} l S\n";
     }
+    /* Image JPEG (RGB) placée à (x, yTop depuis le haut), taille w x h en points */
+    function image($path, $x, $yTop, $w, $h) {
+        $data = @file_get_contents($path);
+        if ($data === false || $data === '') return false;
+        list($pw, $ph) = self::jpegSize($data);
+        if ($pw <= 0 || $ph <= 0) return false;
+        $i = count($this->images);
+        $this->images[] = $data;
+        $this->imgDims[] = [$pw, $ph];
+        $bottomY = $this->h - ($yTop + $h);
+        $this->buf .= "q {$w} 0 0 {$h} {$x} {$bottomY} cm /Img{$i} Do Q\n";
+        return true;
+    }
+    private static function jpegSize($d) {
+        $i = 2; $len = strlen($d);
+        while ($i < $len - 1) {
+            if (ord($d[$i]) != 0xFF) { $i++; continue; }
+            $m = ord($d[$i + 1]);
+            if ($m == 0xD8 || $m == 0xD9 || ($m >= 0xD0 && $m <= 0xD7) || $m == 0x01) { $i += 2; continue; }
+            if ($m >= 0xC0 && $m <= 0xCF && $m != 0xC4 && $m != 0xC8 && $m != 0xCC) {
+                $ph = (ord($d[$i + 5]) << 8) + ord($d[$i + 6]);
+                $pw = (ord($d[$i + 7]) << 8) + ord($d[$i + 8]);
+                return [$pw, $ph];
+            }
+            $seg = (ord($d[$i + 2]) << 8) + ord($d[$i + 3]);
+            if ($seg < 2) break;
+            $i += 2 + $seg;
+        }
+        return [0, 0];
+    }
     function output() {
         $c = "2 J\n" . $this->buf;
+        $nImg = count($this->images);
+        $imgStart = 7;
+        $res = "/Font << /F1 4 0 R /F2 5 0 R >>";
+        if ($nImg > 0) {
+            $xo = [];
+            for ($i = 0; $i < $nImg; $i++) $xo[] = "/Img{$i} " . ($imgStart + $i) . " 0 R";
+            $res .= " /XObject << " . implode(' ', $xo) . " >>";
+        }
         $o = [];
         $o[1] = "<< /Type /Catalog /Pages 2 0 R >>";
         $o[2] = "<< /Type /Pages /Kids [3 0 R] /Count 1 /MediaBox [0 0 {$this->w} {$this->h}] >>";
-        $o[3] = "<< /Type /Page /Parent 2 0 R /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 6 0 R >>";
+        $o[3] = "<< /Type /Page /Parent 2 0 R /Resources << {$res} >> /Contents 6 0 R >>";
         $o[4] = "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>";
         $o[5] = "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>";
         $len = strlen($c);
         $o[6] = "<< /Length {$len} >>\nstream\n{$c}\nendstream";
+        for ($i = 0; $i < $nImg; $i++) {
+            $num = $imgStart + $i;
+            $data = $this->images[$i];
+            list($pw, $ph) = $this->imgDims[$i];
+            $ilen = strlen($data);
+            $o[$num] = "<< /Type /XObject /Subtype /Image /Width {$pw} /Height {$ph} "
+                     . "/ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length {$ilen} >>\nstream\n{$data}\nendstream";
+        }
+        $total = 6 + $nImg;
         $out = "%PDF-1.4\n";
         $off = [];
-        for ($i = 1; $i <= 6; $i++) { $off[$i] = strlen($out); $out .= "{$i} 0 obj\n{$o[$i]}\nendobj\n"; }
+        for ($i = 1; $i <= $total; $i++) { $off[$i] = strlen($out); $out .= "{$i} 0 obj\n{$o[$i]}\nendobj\n"; }
         $xref = strlen($out);
-        $out .= "xref\n0 7\n0000000000 65535 f \n";
-        for ($i = 1; $i <= 6; $i++) $out .= sprintf("%010d 00000 n \n", $off[$i]);
-        $out .= "trailer\n<< /Size 7 /Root 1 0 R >>\nstartxref\n{$xref}\n%%EOF";
+        $out .= "xref\n0 " . ($total + 1) . "\n0000000000 65535 f \n";
+        for ($i = 1; $i <= $total; $i++) $out .= sprintf("%010d 00000 n \n", $off[$i]);
+        $out .= "trailer\n<< /Size " . ($total + 1) . " /Root 1 0 R >>\nstartxref\n{$xref}\n%%EOF";
         return $out;
     }
 }
@@ -142,12 +191,15 @@ function generer_et_envoyer_facture($meta, $orderId, $data, $fromEmail) {
     /* --- Construction du PDF --- */
     $pdf = new MiniPDF();
     $x = 40;
-    $pdf->setFont(14, true);  $pdf->text($x, 60, $CLUB_NOM);
+    // Logo (si présent) en haut à gauche, texte du club à sa droite
+    $hasLogo = $pdf->image(__DIR__ . '/logo-facture.jpg', 40, 40, 76, 76);
+    $xt = $hasLogo ? 128 : 40;
+    $pdf->setFont(13, true);  $pdf->text($xt, 52, $CLUB_NOM);
     $pdf->setFont(9, false);
-    $pdf->text($x, 78, $CLUB_STAT);
-    $pdf->text($x, 90, $CLUB_ADR);
-    $pdf->text($x, 102, $CLUB_IMMAT);
-    $pdf->text($x, 114, "Courriel : " . $CLUB_MAIL);
+    $pdf->text($xt, 70, $CLUB_STAT);
+    $pdf->text($xt, 82, $CLUB_ADR);
+    $pdf->text($xt, 94, $CLUB_IMMAT);
+    $pdf->text($xt, 106, "Courriel : " . $CLUB_MAIL);
 
     $pdf->setFont(20, true);  $pdf->text(400, 64, "FACTURE");
     $pdf->setFont(9, false);
