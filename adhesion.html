@@ -114,6 +114,8 @@
   /* Paiement 1x/3x */
   .paymode{padding:0 18px 4px}
   .paymode .lab{font-size:12px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.02em;margin:12px 0 8px}
+  .paymethod{padding:0 18px 4px}
+  .paymethod .lab{font-size:12px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.02em;margin:12px 0 8px}
   .seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .seg button{padding:10px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);border-radius:9px;font:inherit;font-weight:600;font-size:14px;cursor:pointer}
   .seg button.on{border-color:var(--seal);background:var(--seal-soft);color:#fff}
@@ -195,6 +197,13 @@
         <div class="rhead"><h2>Bulletin d'adhésion</h2></div>
         <ul class="lines" id="lines"></ul>
         <div id="totals"></div>
+        <div class="paymethod" id="paymethod" style="display:none">
+          <div class="lab">Comment souhaitez-vous régler ?</div>
+          <div class="seg">
+            <button type="button" data-method="carte" class="on">Carte bancaire</button>
+            <button type="button" data-method="cheque">Chèque · espèces</button>
+          </div>
+        </div>
         <div class="paymode" id="paymode" style="display:none">
           <div class="lab">Mode de paiement</div>
           <div class="seg">
@@ -207,7 +216,7 @@
           <button class="btn-pay" id="pay" type="button" disabled>Choisissez un cours</button>
           <div class="secure">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
-            <span>Paiement sécurisé par carte via HelloAsso. Vos coordonnées bancaires ne transitent jamais par le serveur du club.</span>
+            <span id="secureNote">Paiement sécurisé par carte via HelloAsso. Vos coordonnées bancaires ne transitent jamais par le serveur du club.</span>
           </div>
         </div>
       </div>
@@ -226,12 +235,13 @@
 </div>
 
 <script>
-const CHECKOUT_URL = "helloasso/checkout.php"; // pont serveur (à déployer)
+const CHECKOUT_URL = "helloasso/checkout.php"; // pont serveur (carte / HelloAsso)
+const INSCRIPTION_URL = "helloasso/inscription.php"; // règlement sur place (chèque/espèces)
 const euro = n => (n/100).toLocaleString("fr-FR",{style:"currency",currency:"EUR"});
 const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 let TARIFS=null, DISC=[], DMAP={};
-let seq=0, mode=1;
+let seq=0, mode=1, payMethod="carte";
 const state={adherents:[], contact:{email:"",tel:""}};
 function nouvelAdherent(){return {id:++seq, prenom:"", nom:"", naissance:"", cours:[nouvelInscription()]};}
 function nouvelInscription(){return {id:++seq, disc:"", cat:"", cours:""};} // indices/ids en chaîne
@@ -328,7 +338,7 @@ function renderReceipt(){
   const pay=document.getElementById("pay"), pm=document.getElementById("paymode");
   if(lignes.length===0){
     ul.innerHTML=`<li class="empty">Aucun cours sélectionné pour l'instant.</li>`;
-    tt.innerHTML=""; pm.style.display="none"; pay.disabled=true; pay.textContent="Choisissez un cours"; return;
+    tt.innerHTML=""; document.getElementById("paymethod").style.display="none"; pm.style.display="none"; pay.disabled=true; pay.textContent="Choisissez un cours"; return;
   }
   ul.innerHTML=lignes.map(l=>`
     <li><div class="ln-top">
@@ -340,9 +350,19 @@ function renderReceipt(){
       ${remise>0?`<div class="row save"><span>Remise famille</span><span>−${euro(remise)}</span></div>`:""}
       <div class="grand"><span>Total à régler</span><b>${euro(total)}</b></div>
     </div>`;
-  pm.style.display="block";
-  renderEcheances(total);
-  pay.disabled=false; pay.textContent=`Régler ${euro(total)}`+(mode===3?" en 3×":"");
+  document.getElementById("paymethod").style.display="block";
+  const note=document.getElementById("secureNote");
+  if(payMethod==="cheque"){
+    pm.style.display="none";
+    pay.textContent="Valider mon inscription";
+    if(note) note.textContent="Vous réglerez directement au club (chèque à l'ordre du CYAM ou espèces). Aucun paiement en ligne : l'inscription deviendra définitive après règlement auprès du professeur.";
+  }else{
+    pm.style.display="block";
+    renderEcheances(total);
+    pay.textContent=`Régler ${euro(total)}`+(mode===3?" en 3×":"");
+    if(note) note.textContent="Paiement sécurisé par carte via HelloAsso. Vos coordonnées bancaires ne transitent jamais par le serveur du club.";
+  }
+  pay.disabled=false;
 }
 function renderEcheances(total){
   const el=document.getElementById("echeances");
@@ -398,8 +418,11 @@ acList.addEventListener("click",e=>{
   acList.innerHTML="";
 });
 document.addEventListener("click",e=>{ if(!e.target.closest(".ac-wrap")) acList.innerHTML=""; });
-document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{
-  mode=+b.dataset.mode; document.querySelectorAll(".seg button").forEach(x=>x.classList.toggle("on",x===b)); renderReceipt();
+document.querySelectorAll("#paymode .seg button").forEach(b=>b.addEventListener("click",()=>{
+  mode=+b.dataset.mode; document.querySelectorAll("#paymode .seg button").forEach(x=>x.classList.toggle("on",x===b)); renderReceipt();
+}));
+document.querySelectorAll("#paymethod .seg button").forEach(b=>b.addEventListener("click",()=>{
+  payMethod=b.dataset.method; document.querySelectorAll("#paymethod .seg button").forEach(x=>x.classList.toggle("on",x===b)); renderReceipt();
 }));
 function find(id){return state.adherents.find(a=>String(a.id)===String(id));}
 
@@ -407,13 +430,29 @@ function find(id){return state.adherents.find(a=>String(a.id)===String(id));}
 function buildPayload(){
   const {lignes,total}=calcule();
   return {
-    saison:TARIFS.saison, mode, montant_total_cents:total,
+    saison:TARIFS.saison, mode, paiement:payMethod, montant_total_cents:total,
     contact:state.contact,
     lignes:lignes.map(l=>({adherent:l.prenom, code:l.code, discipline:l.disc, categorie:l.cat, horaire:l.horaire, plein_cents:l.tarif, remise_pct:Math.round(l.taux*100), prix_cents:l.prix})),
     adherents:state.adherents.filter(a=>a.cours.some(c=>coursTarif(c))).map(a=>({prenom:a.prenom,nom:a.nom,naissance:a.naissance}))
   };
 }
+async function submitInscription(){
+  const payload=buildPayload();
+  const pay=document.getElementById("pay"); const old=pay.textContent;
+  pay.disabled=true; pay.textContent="Enregistrement…";
+  try{
+    const res=await fetch(INSCRIPTION_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+    let data=null; try{ data=await res.json(); }catch(_){}
+    if(res.ok && data && data.ok){ window.location.href="merci-inscription.html"; return; }
+    if(data && data.error){ alert("Inscription impossible : "+data.error); }
+    else { throw new Error("indisponible"); }
+  }catch(err){
+    alert("Impossible d'enregistrer l'inscription pour le moment. Réessayez, ou contactez le club à contact@cyamyerres.fr.");
+  }
+  pay.disabled=false; pay.textContent=old;
+}
 document.getElementById("pay").addEventListener("click",async()=>{
+  if(payMethod==="cheque"){ return submitInscription(); }
   const payload=buildPayload();
   const pay=document.getElementById("pay"); const old=pay.textContent;
   pay.disabled=true; pay.textContent="Redirection vers le paiement…";
