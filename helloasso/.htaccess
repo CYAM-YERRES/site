@@ -1,12 +1,15 @@
-# Empêche le téléchargement direct des données sensibles du dossier.
-# Les scripts PHP (checkout.php, notify.php) restent accessibles.
-<FilesMatch "\.(csv|log)$">
+# Empêche le téléchargement direct des données sensibles du dossier
+# (données adhérents, factures PDF, journaux). Les scripts PHP
+# (checkout.php, notify.php) restent accessibles.
+Options -Indexes
+
+<FilesMatch "\.(csv|log|pdf|txt)$">
     Require all denied
 </FilesMatch>
 
 # Compatibilité anciens serveurs Apache (< 2.4)
 <IfModule !mod_authz_core.c>
-    <FilesMatch "\.(csv|log)$">
+    <FilesMatch "\.(csv|log|pdf|txt)$">
         Order allow,deny
         Deny from all
     </FilesMatch>

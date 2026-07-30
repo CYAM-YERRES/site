@@ -16,3 +16,4 @@ helloasso/config.php
 # Données personnelles des adhérents (ne jamais committer)
 helloasso/adherents.csv
 helloasso/*.log
+helloasso/factures/

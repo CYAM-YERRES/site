@@ -184,4 +184,13 @@ $sujetEnc = '=?UTF-8?B?' . base64_encode($sujet) . '?=';
 $sent = @mail($CLUB_EMAIL, $sujetEnc, $corps, $mh);
 jlog('E-mail ' . ($sent ? 'envoyé' : 'ÉCHEC mail()') . ' à ' . $CLUB_EMAIL);
 
+/* ---------- 3) facture PDF envoyée à l'adhérent ---------- */
+try {
+    require_once __DIR__ . '/facture.php';
+    $fstat = generer_et_envoyer_facture($meta, $orderId, $data, $NOTIFY_FROM);
+    jlog('Facture: ' . $fstat);
+} catch (Throwable $e) {
+    jlog('Facture ERREUR: ' . $e->getMessage());
+}
+
 ok('Adhésion enregistrée.');
