@@ -2,14 +2,11 @@
 /* ============================================================
    CYAM Yerres — Réception des notifications HelloAsso (webhook)
    ------------------------------------------------------------
-   HelloAsso appelle ce fichier automatiquement à chaque
-   événement. On ne traite QUE l'événement « Order » (= une
-   adhésion aboutie, payée en 1× ou 1er prélèvement du 3×).
-   À ce moment on :
-     1) ajoute une ligne au fichier adherents.csv
-     2) envoie un e-mail récapitulatif au club
-   Les détails (membres, cours, horaires, échéancier…) sont lus
-   dans les « metadata » que checkout.php a transmises.
+   HelloAsso appelle ce fichier à chaque événement. On récolte
+   l'adhésion sur « Order » OU « Payment » (anti-doublon par
+   n° de commande), on ajoute une ligne à adherents.csv et on
+   envoie un e-mail récap au club.
+   Un journal notify.log trace chaque appel (débogage).
    ============================================================ */
 
 require __DIR__ . '/config.php';
@@ -18,35 +15,47 @@ $CLUB_EMAIL   = defined('CLUB_EMAIL')   ? CLUB_EMAIL   : 'contact@cyamyerres.fr'
 $NOTIFY_FROM  = defined('NOTIFY_FROM')  ? NOTIFY_FROM  : 'contact@cyamyerres.fr';
 $NOTIFY_TOKEN = defined('NOTIFY_TOKEN') ? NOTIFY_TOKEN : '';
 $CSV_FILE     = __DIR__ . '/adherents.csv';
+$LOG_FILE     = __DIR__ . '/notify.log';
+
+/* ---------- journal ---------- */
+function jlog($msg) {
+    global $LOG_FILE;
+    @file_put_contents($LOG_FILE, date('Y-m-d H:i:s') . '  ' . $msg . "\n", FILE_APPEND | LOCK_EX);
+}
 
 /* ---------- réponses ---------- */
-function ok($msg = 'OK')  { http_response_code(200); echo $msg; exit; }
-function ko($msg, $code) { http_response_code($code); echo $msg; exit; }
+function ok($msg = 'OK')  { jlog('-> 200 ' . $msg); http_response_code(200); echo $msg; exit; }
+function ko($msg, $code) { jlog('-> ' . $code . ' ' . $msg); http_response_code($code); echo $msg; exit; }
 
-/* ---------- petit filtre d'accès (jeton dans l'URL) ---------- */
+$method = $_SERVER['REQUEST_METHOD'] ?? '?';
+jlog("APPEL $method  token=" . (($_GET['token'] ?? '') !== '' ? 'fourni' : 'absent'));
+
+/* ---------- filtre d'accès (jeton dans l'URL) ---------- */
 if ($NOTIFY_TOKEN !== '' && ($_GET['token'] ?? '') !== $NOTIFY_TOKEN)
     ko('Jeton invalide.', 403);
 
-/* Un simple GET (test navigateur) : on répond juste OK */
-if ($_SERVER['REQUEST_METHOD'] !== 'POST')
+/* Simple GET (test navigateur) */
+if ($method !== 'POST')
     ok('notify.php prêt (en attente des notifications HelloAsso).');
 
 /* ---------- lecture du corps ---------- */
 $raw  = file_get_contents('php://input');
 $body = json_decode($raw, true);
-if (!is_array($body)) ok('Corps non JSON, ignoré.');
+if (!is_array($body)) { jlog('Corps non JSON: ' . substr($raw, 0, 200)); ok('Corps non JSON, ignoré.'); }
 
 $eventType = $body['eventType'] ?? '';
 $data      = is_array($body['data'] ?? null) ? $body['data'] : [];
 $meta      = $body['metadata'] ?? ($data['metadata'] ?? []);
 if (!is_array($meta)) $meta = [];
+jlog("eventType=$eventType  metadata=" . (empty($meta) ? 'vide' : 'présente')
+     . '  adherents=' . (empty($meta['adherents']) ? 'non' : count($meta['adherents'])));
 
-/* On ne récolte l'adhésion qu'une fois : sur l'événement « Order ».
-   (Les prélèvements 2 et 3 du 3× arrivent en « Payment » : ignorés.) */
-if ($eventType !== 'Order') ok('Événement « ' . $eventType . ' » ignoré.');
+/* On récolte sur Order ou Payment (anti-doublon plus bas) */
+if (!in_array($eventType, ['Order', 'Payment'], true))
+    ok("Événement « $eventType » ignoré.");
 
-/* Filtre : ne traiter que NOS adhésions (metadata de checkout.php) */
-if (empty($meta['adherents']) || empty($meta['echeances']))
+/* Filtre : seulement NOS adhésions (signature = metadata.adherents) */
+if (empty($meta['adherents']))
     ok('Notification hors adhésion CYAM, ignorée.');
 
 /* ---------- helpers ---------- */
@@ -58,7 +67,7 @@ function frdate($iso) {
 }
 
 /* ---------- infos commande / payeur ---------- */
-$orderId = (string)($data['id'] ?? ($data['order']['id'] ?? ''));
+$orderId = (string)($data['order']['id'] ?? $data['id'] ?? '');
 $payer   = is_array($data['payer'] ?? null) ? $data['payer'] : [];
 $contact = is_array($meta['contact'] ?? null) ? $meta['contact'] : [];
 $adhs    = $meta['adherents'];
@@ -74,9 +83,10 @@ $saison    = $meta['saison']     ?? '';
 $mode      = ($meta['mode'] ?? '1x') === '3x' ? '3 fois' : '1 fois';
 $total     = $meta['total_cents'] ?? 0;
 
-/* ---------- échéances (max 3 colonnes) ---------- */
-$ech = array_values($meta['echeances']);
-$ecol = ['', '', '', '', '', '']; // d1,m1,d2,m2,d3,m3
+/* ---------- échéances (avec repli si absentes) ---------- */
+$ech = isset($meta['echeances']) && is_array($meta['echeances']) ? array_values($meta['echeances']) : [];
+if (empty($ech)) $ech = [['date' => date('Y-m-d'), 'montant_cents' => $total]];
+$ecol = ['', '', '', '', '', ''];
 for ($i = 0; $i < 3 && $i < count($ech); $i++) {
     $ecol[$i * 2]     = frdate($ech[$i]['date'] ?? '');
     $ecol[$i * 2 + 1] = eur($ech[$i]['montant_cents'] ?? 0);
@@ -94,7 +104,7 @@ $txtAdh = implode(' ; ', $txtAdh);
 $txtCours = [];
 foreach (($meta['cours'] ?? []) as $c) {
     $ligne = ($c['discipline'] ?? '') . ' / ' . ($c['categorie'] ?? '');
-    if (!empty($c['horaire'])) $ligne .= ' / ' . $c['horaire'];
+    if (!empty($c['horaire']))  $ligne .= ' / ' . $c['horaire'];
     if (!empty($c['adherent'])) $ligne .= ' — pour ' . $c['adherent'];
     $ligne .= ' — ' . eur($c['prix_cents'] ?? 0) . ' €';
     if (!empty($c['remise_pct'])) $ligne .= ' (-' . $c['remise_pct'] . '%)';
@@ -112,8 +122,7 @@ $row = [date('d/m/Y H:i'), $orderId, $saison, $payPrenom, $payNom, $email, $tel,
     $adresse, $cp, $ville, $mode, eur($total),
     $ecol[0], $ecol[1], $ecol[2], $ecol[3], $ecol[4], $ecol[5], $txtAdh, $txtCours];
 
-/* anti-doublon : si cette commande est déjà dans le CSV, on n'ajoute rien.
-   L'id (2e colonne) est encadré par des points-virgules dans le fichier. */
+/* anti-doublon : commande déjà présente ? (id encadré par ';') */
 if ($orderId !== '' && is_file($CSV_FILE)) {
     $deja = file_get_contents($CSV_FILE);
     if ($deja !== false && strpos($deja, ';' . $orderId . ';') !== false)
@@ -122,17 +131,15 @@ if ($orderId !== '' && is_file($CSV_FILE)) {
 
 $isNew = !is_file($CSV_FILE);
 $fh = @fopen($CSV_FILE, 'a');
-if ($fh === false) ko('Écriture CSV impossible.', 500); // HelloAsso réessaiera
+if ($fh === false) ko('Écriture CSV impossible (droits du dossier ?).', 500);
 if (flock($fh, LOCK_EX)) {
-    if ($isNew) {
-        fwrite($fh, "\xEF\xBB\xBF"); // BOM UTF-8 (accents corrects dans Excel)
-        fputcsv($fh, $headers, ';');
-    }
+    if ($isNew) { fwrite($fh, "\xEF\xBB\xBF"); fputcsv($fh, $headers, ';'); }
     fputcsv($fh, $row, ';');
     fflush($fh);
     flock($fh, LOCK_UN);
 }
 fclose($fh);
+jlog("CSV: ligne ajoutée (commande $orderId, " . eur($total) . " €)");
 
 /* ---------- 2) e-mail récapitulatif au club ---------- */
 $sujet = 'Nouvelle adhésion CYAM — ' . trim($payPrenom . ' ' . $payNom) . ' — ' . eur($total) . ' € (' . $mode . ')';
@@ -159,7 +166,7 @@ foreach ($adhs as $a) {
 $corps .= "\nCours :\n";
 foreach (($meta['cours'] ?? []) as $c) {
     $l = '  • ' . ($c['discipline'] ?? '') . ' / ' . ($c['categorie'] ?? '');
-    if (!empty($c['horaire'])) $l .= ' / ' . $c['horaire'];
+    if (!empty($c['horaire']))  $l .= ' / ' . $c['horaire'];
     if (!empty($c['adherent'])) $l .= ' — pour ' . $c['adherent'];
     $l .= ' — ' . eur($c['prix_cents'] ?? 0) . ' €';
     if (!empty($c['remise_pct'])) $l .= ' (-' . $c['remise_pct'] . '%)';
@@ -174,6 +181,7 @@ $mh .= "Content-Type: text/plain; charset=UTF-8\r\n";
 $mh .= "Content-Transfer-Encoding: 8bit\r\n";
 $sujetEnc = '=?UTF-8?B?' . base64_encode($sujet) . '?=';
 
-@mail($CLUB_EMAIL, $sujetEnc, $corps, $mh); // si l'e-mail échoue, le CSV reste la source fiable
+$sent = @mail($CLUB_EMAIL, $sujetEnc, $corps, $mh);
+jlog('E-mail ' . ($sent ? 'envoyé' : 'ÉCHEC mail()') . ' à ' . $CLUB_EMAIL);
 
 ok('Adhésion enregistrée.');
