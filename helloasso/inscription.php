@@ -142,10 +142,34 @@ if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $ci .= "\nRéférence de votre inscription : " . $ref . "\n\n";
     $ci .= "Sportivement,\nLe CYAM Yerres\ncontact@cyamyerres.fr\n";
 
-    $hi  = 'From: CYAM Yerres <' . $NOTIFY_FROM . ">\r\n";
-    $hi .= 'Reply-To: ' . $NOTIFY_FROM . "\r\n";
-    $hi .= "MIME-Version: 1.0\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n";
-    $envoiClient = @mail($email, '=?UTF-8?B?' . base64_encode($sujet) . '?=', $ci, $hi);
+    // Version HTML (soignée, avec logo)
+    $esc = function ($s) { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); };
+    $coursHtml = '';
+    foreach ($listeCours as $l) $coursHtml .= '<li style="margin:4px 0">' . $esc($l) . '</li>';
+    $html =
+        '<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>'
+      . '<body style="margin:0;background:#f4f1ea;font-family:Arial,Helvetica,sans-serif;color:#1c1a15">'
+      . '<div style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:12px;overflow:hidden">'
+      . '<div style="background:#141210;padding:22px 24px;text-align:center">'
+      . '<img src="https://cyamyerres.fr/logo-cyam.png" alt="CYAM" width="64" height="64" style="display:inline-block;border-radius:50%">'
+      . '<div style="color:#f4eee4;font-size:18px;font-weight:bold;margin-top:8px;letter-spacing:.03em">Club Yerrois d\'Arts Martiaux</div></div>'
+      . '<div style="padding:26px 26px 10px">'
+      . '<p style="font-size:15px">Bonjour <strong>' . $esc(trim($pprenom . ' ' . $pnom)) . '</strong>,</p>'
+      . '<p style="font-size:15px">Nous avons bien enregistré votre demande d\'inscription au CYAM pour la saison <strong>' . $esc($saison) . '</strong>.</p>'
+      . '<div style="background:#fbf3e2;border:1px solid #c9a24b;border-radius:10px;padding:14px 16px;margin:18px 0">'
+      . '<div style="font-weight:bold;color:#8a6d1f">⚠️ Inscription à confirmer</div>'
+      . '<div style="margin-top:5px;font-size:14px">Votre inscription deviendra <strong>définitive une fois le règlement effectué</strong>.</div></div>'
+      . '<p style="font-size:15px;margin:0 0 4px">Montant à régler&nbsp;: <strong style="font-size:22px;color:#E4231F">' . eur($total) . ' €</strong></p>'
+      . '<p style="font-size:14px;color:#57524a">À remettre au professeur lors du prochain cours, par <strong>chèque</strong> (à l\'ordre du CYAM) ou en <strong>espèces</strong>.</p>'
+      . '<p style="font-size:14px;margin:16px 0 4px"><strong>Détail de l\'inscription&nbsp;:</strong></p>'
+      . '<ul style="margin:0 0 14px;padding-left:20px;font-size:14px;color:#57524a">' . $coursHtml . '</ul>'
+      . '<p style="font-size:12px;color:#8a857c">Référence&nbsp;: ' . $esc($ref) . '</p>'
+      . '<p style="font-size:15px;margin-top:22px">Sportivement,<br>Le CYAM Yerres 🥋</p></div>'
+      . '<div style="background:#141210;color:#a79e92;font-size:12px;padding:16px 24px;text-align:center;line-height:1.5">'
+      . 'CYAM — 13 rue Lucien Mânes, 91330 Yerres<br>contact@cyamyerres.fr · cyamyerres.fr</div>'
+      . '</div></body></html>';
+
+    $envoiClient = f_mail_html($email, $NOTIFY_FROM, $sujet, $ci, $html);
 }
 ilog('E-mail client ' . ($envoiClient ? 'envoyé à ' . $email : 'non envoyé'));
 

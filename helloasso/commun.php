@@ -112,3 +112,21 @@ function recompute_panier($lignes, $tarifsPath) {
 
     return ['items' => $items, 'total' => $total, 'saison' => $saison];
 }
+
+/* ---------- e-mail HTML (multipart : texte + HTML) ---------- */
+function f_mail_html($to, $from, $subject, $textBody, $htmlBody) {
+    $b = 'cyam' . md5(uniqid('', true));
+    $subjEnc = '=?UTF-8?B?' . base64_encode($subject) . '?=';
+    $h  = 'From: CYAM Yerres <' . $from . ">\r\n";
+    $h .= 'Reply-To: ' . $from . "\r\n";
+    $h .= "MIME-Version: 1.0\r\n";
+    $h .= 'Content-Type: multipart/alternative; boundary="' . $b . '"' . "\r\n";
+    $m  = '--' . $b . "\r\n";
+    $m .= "Content-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n\r\n";
+    $m .= $textBody . "\r\n\r\n";
+    $m .= '--' . $b . "\r\n";
+    $m .= "Content-Type: text/html; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n\r\n";
+    $m .= $htmlBody . "\r\n\r\n";
+    $m .= '--' . $b . '--';
+    return @mail($to, $subjEnc, $m, $h);
+}
