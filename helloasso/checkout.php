@@ -105,6 +105,16 @@ if ($mode === 3) {
     ];
 }
 
+/* ---------- échéancier détaillé (pour le suivi club) ---------- */
+$echeances = [];
+if ($mode === 3) {
+    $echeances[] = ['rang' => 1, 'date' => date('Y-m-d'), 'montant_cents' => $initialAmount];
+    $echeances[] = ['rang' => 2, 'date' => substr($terms[0]['date'], 0, 10), 'montant_cents' => $terms[0]['amount']];
+    $echeances[] = ['rang' => 3, 'date' => substr($terms[1]['date'], 0, 10), 'montant_cents' => $terms[1]['amount']];
+} else {
+    $echeances[] = ['rang' => 1, 'date' => date('Y-m-d'), 'montant_cents' => $total];
+}
+
 /* ---------- payeur (facultatif) ---------- */
 $payer = ['country' => 'FRA'];
 if (!empty($contact['email']))        $payer['email']     = substr($contact['email'], 0, 255);
@@ -116,16 +126,20 @@ if (!empty($contact['cp']))           $payer['zipCode']   = substr($contact['cp'
 
 /* ---------- métadonnées (dossier du club) ---------- */
 $metadata = [
-    'saison'    => $saison,
-    'mode'      => $mode . 'x',
+    'saison'      => $saison,
+    'mode'        => $mode . 'x',
+    'total_cents' => $total,
+    'echeances'   => $echeances,
     'adherents' => array_map(function ($a) {
         return ['prenom' => $a['prenom'] ?? '', 'nom' => $a['nom'] ?? '', 'naissance' => $a['naissance'] ?? ''];
     }, $adherents),
     'cours' => array_map(function ($it) {
         return ['code' => $it['code'], 'discipline' => $it['disc'], 'categorie' => $it['cat'],
-                'adherent' => $it['adherent'], 'remise_pct' => (int) round($it['taux'] * 100), 'prix_cents' => $it['prix']];
+                'horaire' => $it['horaire'], 'adherent' => $it['adherent'],
+                'remise_pct' => (int) round($it['taux'] * 100), 'prix_cents' => $it['prix']];
     }, $items),
-    'contact' => ['email' => $contact['email'] ?? '', 'tel' => $contact['tel'] ?? '', 'adresse' => $contact['adresse'] ?? ''],
+    'contact' => ['email' => $contact['email'] ?? '', 'tel' => $contact['tel'] ?? '',
+                  'adresse' => $contact['adresse'] ?? '', 'cp' => $contact['cp'] ?? '', 'ville' => $contact['ville'] ?? ''],
 ];
 
 /* ---------- 1) obtenir un access_token ---------- */

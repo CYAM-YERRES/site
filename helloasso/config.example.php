@@ -21,6 +21,15 @@ const HA_SANDBOX = false;
 // --- Adresse du site (pour les pages de retour) -------------
 const SITE_URL = 'https://cyamyerres.fr';
 
+// --- Notifications d'adhésion (webhook notify.php) ----------
+// E-mail qui reçoit un récap à chaque adhésion aboutie :
+const CLUB_EMAIL   = 'contact@cyamyerres.fr';
+// Expéditeur des e-mails (une adresse @cyamyerres.fr = meilleure délivrabilité) :
+const NOTIFY_FROM  = 'contact@cyamyerres.fr';
+// Jeton secret ajouté à l'URL de notification (?token=...) pour
+// bloquer les appels non autorisés. Inventez une longue chaîne :
+const NOTIFY_TOKEN = '';   // ← ex. 'cyam-7Kf29xQeR4' (à recopier dans HelloAsso)
+
 // ============================================================
 //  Ne rien modifier en dessous.
 // ============================================================
