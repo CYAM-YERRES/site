@@ -102,6 +102,27 @@ $row = csv_ligne([
 if (!csv_append($CSV_FILE, $row)) ifail('Enregistrement impossible (droits du dossier ?).', 500);
 ilog("CSV ajouté (chèque/espèces, réf $ref, " . eur($total) . " €)");
 
+/* ---------- synchronisation Google Sheets (une ligne par cours) ---------- */
+foreach ($items as $it) {
+    $sres = sheets_push_ligne($it['disc'] ?? 'Divers', [
+        'date'       => date('d/m/Y H:i'),
+        'statut'     => 'À régler (chèque/espèces)',
+        'paiement'   => 'Chèque ou espèces',
+        'reference'  => $ref,
+        'saison'     => $saison,
+        'adherent'   => $it['adherent'] ?? '',
+        'naissance'  => trouver_naissance($adherents, $it['adherent'] ?? ''),
+        'categorie'  => $it['cat'] ?? '',
+        'horaire'    => $it['horaire'] ?? '',
+        'montant'    => eur($it['prix'] ?? 0),
+        'remise'     => !empty($it['taux']) ? '-' . round($it['taux'] * 100) . '%' : '',
+        'email'      => $email,
+        'tel'        => $tel,
+        'adresse'    => trim($adresse . ' ' . $cp . ' ' . $ville),
+    ]);
+    ilog('Sheets [' . ($it['disc'] ?? '?') . ']: ' . $sres);
+}
+
 /* ---------- e-mail au club ---------- */
 $sujetClub = 'Inscription à régler (chèque/espèces) — ' . trim($pprenom . ' ' . $pnom) . ' — ' . eur($total) . ' €';
 $cc  = "Une inscription vient d'être enregistrée avec règlement SUR PLACE (chèque ou espèces).\n";

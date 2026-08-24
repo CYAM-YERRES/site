@@ -130,6 +130,27 @@ if ($orderId !== '' && is_file($CSV_FILE)) {
 if (!csv_append($CSV_FILE, $row)) ko('Écriture CSV impossible (droits du dossier ?).', 500);
 jlog("CSV: ligne ajoutée (commande $orderId, " . eur($total) . " €)");
 
+/* ---------- 1bis) synchronisation Google Sheets (une ligne par cours) ---------- */
+foreach (($meta['cours'] ?? []) as $c) {
+    $sres = sheets_push_ligne($c['discipline'] ?? 'Divers', [
+        'date'       => date('d/m/Y H:i'),
+        'statut'     => 'Payé (en ligne)',
+        'paiement'   => $modePaiement,
+        'reference'  => $orderId,
+        'saison'     => $saison,
+        'adherent'   => $c['adherent'] ?? '',
+        'naissance'  => trouver_naissance($adhs, $c['adherent'] ?? ''),
+        'categorie'  => $c['categorie'] ?? '',
+        'horaire'    => $c['horaire'] ?? '',
+        'montant'    => eur($c['prix_cents'] ?? 0),
+        'remise'     => !empty($c['remise_pct']) ? '-' . $c['remise_pct'] . '%' : '',
+        'email'      => $email,
+        'tel'        => $tel,
+        'adresse'    => trim($adresse . ' ' . $cp . ' ' . $ville),
+    ]);
+    jlog('Sheets [' . ($c['discipline'] ?? '?') . ']: ' . $sres);
+}
+
 /* ---------- 2) e-mail récapitulatif au club ---------- */
 $sujet = 'Nouvelle adhésion CYAM — ' . trim($payPrenom . ' ' . $payNom) . ' — ' . eur($total) . ' € (' . $mode . ')';
 

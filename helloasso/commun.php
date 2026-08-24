@@ -113,6 +113,47 @@ function recompute_panier($lignes, $tarifsPath) {
     return ['items' => $items, 'total' => $total, 'saison' => $saison];
 }
 
+/* ---------- synchronisation Google Sheets (une ligne par cours) ----------
+   Pousse une ligne dans l'onglet correspondant à la discipline, via un
+   Google Apps Script publié en application Web (voir sync-sheets.gs.txt).
+   Ne fait rien si SHEETS_WEBHOOK_URL n'est pas configurée ; une erreur
+   réseau ne doit jamais interrompre l'adhésion (best effort, silencieux). */
+function sheets_push_ligne($discipline, $ligne) {
+    if (!defined('SHEETS_WEBHOOK_URL') || SHEETS_WEBHOOK_URL === '') return 'non configuré';
+    $payload = [
+        'token'      => defined('SHEETS_TOKEN') ? SHEETS_TOKEN : '',
+        'discipline' => (string) $discipline,
+        'ligne'      => $ligne,
+    ];
+    $ch = curl_init(SHEETS_WEBHOOK_URL);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST           => true,
+        CURLOPT_POSTFIELDS     => json_encode($payload, JSON_UNESCAPED_UNICODE),
+        CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
+        CURLOPT_TIMEOUT        => 10,
+        CURLOPT_FOLLOWLOCATION => true, // Apps Script /exec redirige vers la réponse
+    ]);
+    $res    = curl_exec($ch);
+    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $err    = curl_error($ch);
+    curl_close($ch);
+    if ($res === false) return 'erreur cURL: ' . $err;
+    return 'HTTP ' . $status . ': ' . substr((string) $res, 0, 150);
+}
+
+/* Cherche la date de naissance d'un adhérent par prénom (best-effort,
+   même logique que le texte récapitulatif déjà envoyé par e-mail). */
+function trouver_naissance($adherents, $prenom) {
+    $prenom = trim((string) $prenom);
+    if ($prenom === '') return '';
+    foreach ($adherents as $a) {
+        if (trim((string) ($a['prenom'] ?? '')) === $prenom)
+            return !empty($a['naissance']) ? frdate($a['naissance']) : '';
+    }
+    return '';
+}
+
 /* ---------- e-mail HTML (multipart : texte + HTML) ---------- */
 function f_mail_html($to, $from, $subject, $textBody, $htmlBody) {
     $b = 'cyam' . md5(uniqid('', true));

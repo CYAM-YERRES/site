@@ -30,6 +30,15 @@ const NOTIFY_FROM  = 'contact@cyamyerres.fr';
 // bloquer les appels non autorisés. Inventez une longue chaîne :
 const NOTIFY_TOKEN = '';   // ← ex. 'cyam-7Kf29xQeR4' (à recopier dans HelloAsso)
 
+// --- Synchronisation Google Sheets (facultatif) --------------
+// Voir helloasso/sync-sheets.gs.txt pour créer le script côté
+// Google Sheets, puis collez ici l'URL d'application Web obtenue
+// (Déployer → Nouveau déploiement → Application Web) :
+const SHEETS_WEBHOOK_URL = '';   // ← ex. 'https://script.google.com/macros/s/AKfycb.../exec'
+// Jeton secret : doit être EXACTEMENT le même que la constante
+// TOKEN en haut de sync-sheets.gs.txt (inventez une longue chaîne) :
+const SHEETS_TOKEN = '';
+
 // ============================================================
 //  Ne rien modifier en dessous.
 // ============================================================

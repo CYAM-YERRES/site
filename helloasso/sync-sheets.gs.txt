@@ -1,0 +1,76 @@
+/* ============================================================
+   CYAM Yerres — Réception des adhésions dans Google Sheets
+   ------------------------------------------------------------
+   À COLLER dans l'éditeur Apps Script d'un Google Sheet
+   (Extensions → Apps Script), puis à publier en application Web.
+   Voir le guide de mise en service dans le message du webmaster
+   pour les étapes détaillées (création, déploiement, config.php).
+
+   Ce script reçoit une ligne par cours (un adhérent inscrit à une
+   discipline) et l'ajoute dans l'onglet du même nom que la
+   discipline — créé automatiquement s'il n'existe pas encore.
+   ============================================================ */
+
+// 👉 Remplacez cette valeur par une longue chaîne secrète de votre
+//    choix, et recopiez EXACTEMENT la même dans config.php du site
+//    (constante SHEETS_TOKEN).
+const TOKEN = "CHANGEZ_MOI_avec_une_longue_chaine_secrete";
+
+const HEADERS = ["Date", "Statut", "Paiement", "Référence", "Saison",
+  "Adhérent", "Naissance", "Catégorie", "Horaire", "Montant (€)",
+  "Remise", "E-mail payeur", "Téléphone payeur", "Adresse"];
+
+function doPost(e) {
+  try {
+    const body = JSON.parse(e.postData.contents);
+    if (body.token !== TOKEN) {
+      return jsonOut_({ error: "jeton invalide" });
+    }
+
+    const discipline = String(body.discipline || "Divers").trim() || "Divers";
+    const ligne = body.ligne || {};
+
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    let sheet = ss.getSheetByName(discipline);
+    if (!sheet) {
+      sheet = ss.insertSheet(discipline);
+      sheet.appendRow(HEADERS);
+      sheet.setFrozenRows(1);
+      sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight("bold");
+    }
+
+    // anti-doublon : référence + adhérent + horaire déjà présents dans cet onglet ?
+    const ref = String(ligne.reference || "");
+    const adh = String(ligne.adherent || "");
+    const hor = String(ligne.horaire || "");
+    if (ref !== "") {
+      const data = sheet.getDataRange().getValues();
+      for (let i = 1; i < data.length; i++) {
+        if (String(data[i][3]) === ref && String(data[i][5]) === adh && String(data[i][8]) === hor) {
+          return jsonOut_({ ok: true, dedup: true });
+        }
+      }
+    }
+
+    sheet.appendRow([
+      ligne.date || "", ligne.statut || "", ligne.paiement || "",
+      ref, ligne.saison || "", adh, ligne.naissance || "",
+      ligne.categorie || "", hor, ligne.montant || "",
+      ligne.remise || "", ligne.email || "", ligne.tel || "", ligne.adresse || ""
+    ]);
+
+    return jsonOut_({ ok: true });
+  } catch (err) {
+    return jsonOut_({ error: String(err) });
+  }
+}
+
+// Permet de vérifier depuis un navigateur que le script est bien déployé.
+function doGet(e) {
+  return jsonOut_({ ok: true, info: "sync-sheets prêt (POST uniquement pour les données)." });
+}
+
+function jsonOut_(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}
