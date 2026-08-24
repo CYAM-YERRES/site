@@ -94,6 +94,11 @@
   .sched-foot a{color:#D9B85F;font-weight:600;text-decoration:none}
   .sched-foot a:hover{text-decoration:underline}
   @media(max-width:600px){.sched-row{grid-template-columns:1fr;gap:5px}}
+  .posters{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:8px}
+  .posters figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 10px 26px rgba(28,26,21,.14)}
+  .posters img{width:100%;height:auto;display:block}
+  .posters figcaption{padding:12px 16px;font-size:13.5px;color:var(--ink-soft);text-align:center}
+  @media(max-width:760px){.posters{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -205,6 +210,20 @@
       <a class="doc-btn" href="documents/aikido-questionnaire-sante-adulte.pdf" target="_blank" rel="noopener"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h4"/></svg><span>Questionnaire de santé — Adulte<small>PDF</small></span></a>
       <a class="doc-btn" href="documents/aikido-questionnaire-sante-mineur.pdf" target="_blank" rel="noopener"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h4"/></svg><span>Questionnaire de santé — Mineur<small>PDF</small></span></a>
     </div>
+  </div>
+</section>
+
+<section class="section-pad wrap">
+  <h2 class="section">Nos prochains événements</h2>
+  <div class="posters">
+    <figure>
+      <img src="images/affiche-matinee-portes-ouvertes.jpg" alt="Matinée Portes Ouvertes CYAM — dimanche 6 septembre de 10h à 12h, découverte de toutes les disciplines d'arts martiaux" loading="lazy">
+      <figcaption>Matinée Portes Ouvertes &mdash; dimanche 6&nbsp;septembre, 10h&ndash;12h</figcaption>
+    </figure>
+    <figure>
+      <img src="images/affiche-aikido-decouverte.jpg" alt="Aïkido Découverte — soirées du lundi 7 et jeudi 10 septembre 2026, enfants, ados, adultes et séniors" loading="lazy">
+      <figcaption>A&iuml;kido D&eacute;couverte &mdash; lundi 7 &amp; jeudi 10&nbsp;septembre 2026</figcaption>
+    </figure>
   </div>
 </section>
 
