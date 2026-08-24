@@ -1,8 +1,8 @@
 /* ============================================================
    CYAM Yerres — Réception des adhésions dans Google Sheets
    ------------------------------------------------------------
-   À COLLER dans l'éditeur Apps Script d'un Google Sheet
-   (Extensions → Apps Script), puis à publier en application Web.
+   À COLLER dans un projet créé sur https://script.google.com
+   (Nouveau projet), puis à publier en application Web.
    Voir le guide de mise en service dans le message du webmaster
    pour les étapes détaillées (création, déploiement, config.php).
 
@@ -15,6 +15,10 @@
 //    choix, et recopiez EXACTEMENT la même dans config.php du site
 //    (constante SHEETS_TOKEN).
 const TOKEN = "CHANGEZ_MOI_avec_une_longue_chaine_secrete";
+
+// 👉 Identifiant de la feuille cible : c'est la partie de l'URL entre
+//    /d/ et /edit — ex. déjà rempli avec « Adhérents CYAM 2026/2027 ».
+const SHEET_ID = "1yoPQ17_4DH2BPaHc6T84SGrPPY1KDAzWU0tCHzyp8Y4";
 
 const HEADERS = ["Date", "Statut", "Paiement", "Référence", "Saison",
   "Adhérent", "Naissance", "Catégorie", "Horaire", "Montant (€)",
@@ -30,7 +34,7 @@ function doPost(e) {
     const discipline = String(body.discipline || "Divers").trim() || "Divers";
     const ligne = body.ligne || {};
 
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const ss = SpreadsheetApp.openById(SHEET_ID);
     let sheet = ss.getSheetByName(discipline);
     if (!sheet) {
       sheet = ss.insertSheet(discipline);
