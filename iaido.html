@@ -95,6 +95,16 @@
   .sched-foot a{color:#D9B85F;font-weight:600;text-decoration:none}
   .sched-foot a:hover{text-decoration:underline}
   @media(max-width:600px){.sched-row{grid-template-columns:1fr;gap:5px}}
+  .team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
+  @media(max-width:760px){.team-grid{grid-template-columns:1fr;max-width:340px;margin-left:auto;margin-right:auto}}
+  .team-card{background:#F6EDDB;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  .team-card .photo{aspect-ratio:4/5;background:var(--line)}
+  .team-card .photo img{width:100%;height:100%;object-fit:cover;display:block}
+  .team-card .body{padding:16px 18px 20px}
+  .team-card .role{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--seal);background:var(--seal-soft);border:1px solid var(--line-strong);border-radius:20px;padding:4px 11px;margin-bottom:10px}
+  .team-card .role svg{width:13px;height:13px;flex:none}
+  .team-card h3{font-family:var(--serif);font-size:18px;margin:0 0 5px;font-weight:600}
+  .team-card .grade{font-size:13.5px;color:var(--ink-soft);margin:0}
 </style>
 </head>
 <body>
@@ -178,6 +188,39 @@
   </div>
 </section>
 
+
+<div class="band theme-light">
+  <section class="section-pad wrap">
+    <span class="eyebrow">Iaïdo</span>
+    <h2 class="section">Les enseignants.</h2>
+    <div class="team-grid">
+      <article class="team-card">
+        <div class="photo"><img src="images/iaido-alain-karsenty.jpg" alt="Alain Karsenty, enseignant d'Iaïdo au CYAM Yerres" loading="lazy"></div>
+        <div class="body">
+          <span class="role"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M9 13.5 6 21l6-3 6 3-3-7.5"/></svg>Enseignant principal</span>
+          <h3>Alain Karsenty</h3>
+          <p class="grade">5<sup>e</sup>&nbsp;dan &middot; Titulaire d'un CFEB</p>
+        </div>
+      </article>
+      <article class="team-card">
+        <div class="photo"><img src="images/iaido-patrick-sechaud.jpg" alt="Patrick S&eacute;chaud, enseignant d'Iaïdo au CYAM Yerres" loading="lazy"></div>
+        <div class="body">
+          <span class="role"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M9 13.5 6 21l6-3 6 3-3-7.5"/></svg>Enseignant</span>
+          <h3>Patrick S&eacute;chaud</h3>
+          <p class="grade">4<sup>e</sup>&nbsp;dan &middot; Titulaire d'un CFEB</p>
+        </div>
+      </article>
+      <article class="team-card">
+        <div class="photo"><img src="images/iaido-valentin-odouard.jpg" alt="Valentin Odouard, enseignant d'Iaïdo au CYAM Yerres" loading="lazy"></div>
+        <div class="body">
+          <span class="role"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M9 13.5 6 21l6-3 6 3-3-7.5"/></svg>Enseignant</span>
+          <h3>Valentin Odouard</h3>
+          <p class="grade">3<sup>e</sup>&nbsp;dan &middot; Titulaire d'un CFEB</p>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>
 
 <section class="section-pad wrap">
   <div class="cta-band">
